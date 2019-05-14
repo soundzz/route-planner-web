@@ -1,0 +1,6 @@
+#IDE specific stuff
+out/
+.idea/
+
+#map data -> file size too large
+*.fmi
