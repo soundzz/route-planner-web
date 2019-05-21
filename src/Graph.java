@@ -1,31 +1,36 @@
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.Scanner;
+import java.util.Locale;
+import java.io.FileNotFoundException;
 
 /**
- * Die Klasse Graph liest die verschiedenen Graphen ein.
- * In Vertices werden die Knoten mit Länge und Breite gespeichert.
- * In Edges werden die Kanten mit Startknoten, Zielknoten und Kosten gespeichert.
- * In OffsetArray wird der Offset, die erste Kante, die von einem Knoten abgeht, gespeichert.
- * numberOfVertices ist die Anzahl der Knoten
- * numberOfEdges ist die Anzahl der Kanten
- */
+ * the class Graph reads the File with the graph information
+ * the array Nodes contains the nodes with length and width.
+ * the array Edges contains the edges with starting node, target node and costs.
+ * OffsetArray contains the offset, the first place of the edge in the array edges of a node.
+ * numberOfNodes is the number of nodes in the graph.
+ * numberOfEdges is the number of edges in the graph.
+ * the array Compare has all nodes include the information costs and predecessor.
+ *
+ * */
 public class Graph {
     private int[] OffsetArray;
-    private float[][] Vertices;
+    private float[][] Nodes;
     private float[][] Edges;
-    private int numberOfVertices;
+    private int numberOfNodes;
     private int numberOfEdges;
+    private float[][] Compare;
 
     /**
-     * liest die Datei des Graphen ein und speichert die Daten in den Arrays.
-     * BufferedReader liest das File ein.
-     * Dann werden die ersten Zeilen der Datei uebersprungen.
-     * ein Scanner wird erstellt um durch die Zeilen zu gehen.
-     * Falls die Datei nicht gefunden wird, wird eine Exception geworfen.
+     * readGraphData reads the file and saves the information in the arrays Nodes and Edges.
+     * the methodes works in the following way:
+     * 1) BufferedReader reads the file.
+     * 2) the first lines of the file gets skipped
+     * 3) a scanner gets created and goes through the lines
      *
-     * @param fileName specifies the file containing graph data
-     */
+     * If no file is found the programm throws an exception.
+     * */
 
     public void readGraphData(String fileName) {
         BufferedReader reader = null;
@@ -37,29 +42,29 @@ public class Graph {
             String line = null;
             while (!dataStart) {
                 line = reader.readLine();
-                if (!line.contains("#")) {
+                if(!line.contains("#")){
                     dataStart = true;
                 }
             }
 
-            numberOfVertices = Integer.parseInt(reader.readLine());
+            numberOfNodes = Integer.parseInt(reader.readLine());
             numberOfEdges = Integer.parseInt(reader.readLine());
-            Vertices = new float[numberOfVertices][2];
+            Nodes = new float[numberOfNodes][2];
             Edges = new float[numberOfEdges][3];
 
             Scanner scanner = null;
 
-            for (int i = 0; i < numberOfVertices; i++) {
+            for(int i = 0; i < numberOfNodes; i++){
                 scanner = new Scanner(reader.readLine());
 
                 scanner.next();
                 scanner.next();
 
-                Vertices[i][0] = Float.parseFloat(scanner.next()); //Latitude
-                Vertices[i][1] = Float.parseFloat(scanner.next()); //Longitude
+                Nodes[i][0] = Float.parseFloat(scanner.next()); //Latitude
+                Nodes[i][1] = Float.parseFloat(scanner.next()); //Longitude
             }
             scanner.close();
-            for (int i = 0; i < numberOfEdges; i++) {
+            for(int i = 0; i < numberOfEdges; i++){
                 scanner = new Scanner(reader.readLine());
                 Edges[i][0] = Float.parseFloat(scanner.next()); //srcID
                 Edges[i][1] = Float.parseFloat(scanner.next()); //trgID
@@ -68,48 +73,58 @@ public class Graph {
             scanner.close();
 
 
-        } catch (Exception e) {
+
+        }catch(Exception e){
             System.out.println(e.getMessage());
         }
     }
 
     /**
-     * erstellt das Offset Array
-     */
-    public void calculateOffset() { //muss nicht public sein? sollte nur beim einlesen innerhalb der klasse aufgerufen werden
-        OffsetArray = new int[numberOfVertices];
+     * calculateOffset creates the Offset- Array
+     * */
+
+
+    public void calculateOffset() {
+        OffsetArray = new int[numberOfNodes];
         for (int i = 0; i < numberOfEdges; i++) {
-            if (Edges[i][0] == i) {
-                OffsetArray[(int) Edges[i][0]] = i; //evtl etwas umständlich, dauert evtl zu lang
-            }
-            if (i > 0 && (Edges[i][0] != Edges[i - 1][0])) {
-                OffsetArray[(int) Edges[i][0]] = i;
+            if(i==0 || (Edges[i][0] != Edges[i-1][0])){
+                OffsetArray[(int)Edges[i][0]] =    i;
             }
 
         }
+
 
 
     }
 
     /**
-     * Hilfsmethode zur Ausgabe
+     *
+     * calculateCompare creates the Compare- Array.
      */
-    public void printNodes() {
-        for (int i = 0; i < numberOfVertices; i++) {
-            // System.out.println("Node ID: " + i + " | x: " + Vertices[i][0] + " | y: " + Vertices[i][1]);
-            System.out.println("Offset: " + i + "  Eintrag " + OffsetArray[i]);
-        }
+
+    public void calculateCompare(){
+
     }
+
+    /**
+     * Method for system out.
+     * */
+        public void printNodes(){
+            for(int i = 0; i < numberOfNodes; i++){
+               // System.out.println("Node ID: " + i + " | x: " + Nodes[i][0] + " | y: " + Nodes[i][1]);
+                System.out.println("Offset: "+ i+ "  Eintrag "+ OffsetArray[i]);
+            }
+        }
 
 
     /**
      * Main
-     */
-    public static void main(String[] args) {
-        Graph graph = new Graph();
-        graph.readGraphData("toy.fmi");
-        graph.calculateOffset();
-        graph.printNodes();
+     * */
+        public static void main (String[]args){
+            Graph graph = new Graph();
+            graph.readGraphData("toy.fmi");
+            graph.calculateOffset();
+            graph.printNodes();
 
+        }
     }
-}
