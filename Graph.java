@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
  * OffsetArray contains the offset, the first place of the edge in the array edges of a node.
  * numberOfNodes is the number of nodes in the graph.
  * numberOfEdges is the number of edges in the graph.
- *
+ * the array Compare has all nodes include the information costs and predecessor.
  *
  * */
 public class Graph {
@@ -20,6 +20,7 @@ public class Graph {
     private float[][] Edges;
     private int numberOfNodes;
     private int numberOfEdges;
+    private float[][] Compare;
 
     /**
      * readGraphData reads the file and saves the information in the arrays Nodes and Edges.
@@ -79,7 +80,7 @@ public class Graph {
     }
 
     /**
-     * calculateOffset creates the Offset Array
+     * calculateOffset creates the Offset- Array
      * */
 
 
@@ -93,6 +94,15 @@ public class Graph {
         }
 
 
+
+    }
+
+    /**
+     *
+     * calculateCompare creates the Compare- Array.
+     */
+
+    public void calculateCompare(){
 
     }
 
