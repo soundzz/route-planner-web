@@ -2,6 +2,7 @@
 out/
 .idea/
 11.iml
+Benchs/
 
 #map data -> file size too large
 *.fmi
