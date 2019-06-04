@@ -4,7 +4,7 @@ import java.io.FileReader;
 
 
 public class Hub {
-    private List<Integer> query = new ArrayList<Integer>(); //in pairs of start/target nodes at even/odd indices
+    private List<Integer> query = new ArrayList<>(); //in pairs of start/target nodes at even/odd indices
     private int[] results;
 
     public void query(String fileName, Graph graph) {
@@ -30,7 +30,6 @@ public class Hub {
         //calculate minimal path costs
 
         results = new int[query.size()/2];
-        System.out.println("a");
         for (int i = 0; i < results.length; i++){
             results[i] = graph.pathCost(query.get(i), query.get(i+1));
             System.out.println(results[i]);
@@ -40,7 +39,17 @@ public class Hub {
 
     public static void main(String args[]) {
         Graph graph = new Graph("stgtregbz.fmi");
-        System.out.println(graph.pathCost(377371, 754742));
+        Hub hub = new Hub();
+        hub.query("Benchs/stgtregbz.que", graph);
+        /*System.out.println(graph.pathCost(0,1));
+        System.out.println(graph.pathCost(0,2));
+        System.out.println(graph.pathCost(0,3));
+        System.out.println(graph.pathCost(1,2));
+        System.out.println(graph.pathCost(1,3));
+        System.out.println(graph.pathCost(1,4));
+        System.out.println(graph.pathCost(3,4));
+
+         */
     }
 }
 

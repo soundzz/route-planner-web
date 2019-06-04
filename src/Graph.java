@@ -65,8 +65,8 @@ public class Graph {
 
             numberOfNodes = Integer.parseInt(reader.readLine());
             numberOfEdges = Integer.parseInt(reader.readLine());
-            nodes = new float[numberOfNodes][2];
-            edges = new int[numberOfEdges][3];
+            nodes = new float[2][numberOfNodes];
+            edges = new int[3][numberOfEdges];
 
             Scanner scanner = null;
 
@@ -76,15 +76,15 @@ public class Graph {
                 scanner.next();
                 scanner.next();
 
-                nodes[i][0] = Float.parseFloat(scanner.next()); //Latitude
-                nodes[i][1] = Float.parseFloat(scanner.next()); //Longitude
+                nodes[0][i] = Float.parseFloat(scanner.next()); //Latitude
+                nodes[1][i] = Float.parseFloat(scanner.next()); //Longitude
             }
             scanner.close();
             for (int i = 0; i < numberOfEdges; i++) {
                 scanner = new Scanner(reader.readLine());
-                edges[i][0] = Integer.parseInt(scanner.next()); //srcID
-                edges[i][1] = Integer.parseInt(scanner.next()); //trgID
-                edges[i][2] = Integer.parseInt(scanner.next()); //cost
+                edges[0][i] = Integer.parseInt(scanner.next()); //srcID
+                edges[1][i] = Integer.parseInt(scanner.next()); //trgID
+                edges[2][i] = Integer.parseInt(scanner.next()); //cost
             }
             scanner.close();
             calculateOffset();
@@ -106,8 +106,8 @@ public class Graph {
         offsetArray = new int[numberOfNodes]; //all entries are 0 at beginning
         for (int i = 1; i < numberOfEdges; i++) {
             offsetArray[edges[0][0]] = 0;
-            if (edges[i][0] != edges[i - 1][0]) {
-                offsetArray[edges[i][0]] = i;
+            if (edges[0][i] != edges[0][i-1]) {
+                offsetArray[edges[0][i]] = i;
             }
 
         }
@@ -119,15 +119,15 @@ public class Graph {
      * We set all parents to null, maybe its not needed.
      */
 
-    public void initialize(int start, Comparator<Integer> comp) {
+    public void initialize(int start) {
         parents = new int[numberOfNodes];
         costs = new int[numberOfNodes];
         for (int i = 0; i < numberOfNodes; i++) {
             parents[i] = -1; // our null, because 0 is a node index, maybe not needed.
-            costs[i] = Integer.MAX_VALUE; // all other nodes get distance infinity
+            costs[i] = Integer.MAX_VALUE ; // all other nodes get distance infinity
         }
         costs[start] = 0;
-        queue = new PriorityQueue<>(numberOfNodes, comp);
+        queue = new PriorityQueue<>(numberOfNodes, Comparator.comparingInt(node -> costs[node]));
         for (int node = 0; node < numberOfNodes; node++) {
             queue.add(node);
         }
@@ -136,11 +136,18 @@ public class Graph {
 
     /**
      * Dijkstra does the Dijkstra algorithm.
-     * First we overrite the comparator of the priority queue.
+     * First we overwrite the comparator of the priority queue.
      */
 
     public void updateCosts(int node_A, int node_B, int currentOffset) {
-        int newCosts = costs[node_A] + edges[currentOffset][2];
+        int newCosts;
+        if(costs[node_A] == Integer.MAX_VALUE){
+            newCosts = costs[node_A];
+            //System.out.println("Starting node has no outgoing edges");
+        }else{
+            newCosts = costs[node_A] + edges[2][currentOffset];
+        }
+
         if (newCosts < costs[node_B]) {
             costs[node_B] = newCosts;
             parents[node_B] = node_A;
@@ -149,26 +156,22 @@ public class Graph {
 
     public void Dijkstra(int startNode) {
         System.out.println("dijkstra");
-        //Comparator changes the order of the priority queue sorted by the distance to the starting node
-        Comparator<Integer> nodeComparator = (Integer node_A, Integer node_B) -> costs[node_A] - costs[node_B];
 
-        ;
         // initialize  parents, costs and priority queue
-
-        initialize(startNode, nodeComparator);
-
+        initialize(startNode);
         while (!queue.isEmpty()) {
             int currentNode = queue.poll();  // gets node with min costs to start node and deletes currentNode
+
             //System.out.println(currentNode); // REIHENFOLGE
             offset = offsetArray[currentNode];
-            while (edges[offset][0] == currentNode) {
-                if (queue.contains(edges[offset][1])) {  // if neighbour is in queue
-                    updateCosts(currentNode, edges[offset][1], offset);
+            while (offset < numberOfEdges && edges[0][offset] == currentNode) {
+                if (queue.contains(edges[1][offset])) {  // if neighbour is in queue
+                    updateCosts(currentNode, edges[1][offset], offset);
+                    queue.remove(edges[1][offset]);
+                    queue.add(edges[1][offset]);
+
                 }
                 offset++;
-                if (offset >= numberOfEdges) {
-                    break;
-                }
             }
         }
         /*for(int i =0; i < numberOfNodes; i++){
@@ -180,7 +183,7 @@ public class Graph {
     }
 
     public List<Integer> shortestPathTo(int targetNode) {
-        path = new ArrayList<Integer>();
+        path = new ArrayList<>();
         path.add(targetNode);
         int currentNode = targetNode;
         while (parents[currentNode] != -1) {
@@ -196,7 +199,6 @@ public class Graph {
      */
     public void printNodes() {
         for (int i = 0; i < numberOfNodes; i++) {
-            // System.out.println("Node ID: " + i + " | x: " + Nodes[i][0] + " | y: " + Nodes[i][1]);
             System.out.println("Offset: " + i + "  Eintrag " + offsetArray[i]);
         }
     }
