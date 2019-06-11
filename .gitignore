@@ -1,5 +1,6 @@
 out/
 .idea/
+mapdata/
 11.iml
 Benchs/
 output.sol

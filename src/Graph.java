@@ -50,9 +50,10 @@ public class Graph {
      * @param fileName ...
      */
     public void readGraphData(String fileName) {
+        long startTime = java.lang.System.currentTimeMillis();
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(fileName));
+            reader = new BufferedReader(new FileReader("mapdata/" + fileName));
 
 
             boolean dataStart = false;
@@ -88,13 +89,14 @@ public class Graph {
                 edges[2][i] = Integer.parseInt(scanner.next()); //cost
             }
             scanner.close();
+            System.out.println("data read, time passed: " + ((java.lang.System.currentTimeMillis() - startTime)/1000));
             calculateOffset();
 
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("data read");
+        System.out.println("calculated offset, time passed: " + ((java.lang.System.currentTimeMillis() - startTime)/1000));
     }
 
     /**
@@ -122,6 +124,7 @@ public class Graph {
      */
 
     public void initialize(int start) {
+        calculatedPaths = false;
         parents = new int[numberOfNodes];
         costs = new int[numberOfNodes];
         for (int i = 0; i < numberOfNodes; i++) {
@@ -154,7 +157,8 @@ public class Graph {
         }
     }
 
-    public void Dijkstra(int startNode) {
+    public void Dijkstra(int startNode, int targetNode) {
+        long startTime = java.lang.System.currentTimeMillis();
         //System.out.println("dijkstra");
 
         // initialize  parents, costs and priority queue
@@ -162,6 +166,9 @@ public class Graph {
         alreadyVisited = new int[numberOfNodes];
         while (!queue.isEmpty()) {
             int currentNode = queue.poll();  // gets node with min costs to start node and deletes currentNode
+            if(currentNode == targetNode){
+                break;
+            }
             if (alreadyVisited[currentNode] == 1) {
                 continue;
             } else {
@@ -186,6 +193,7 @@ public class Graph {
         calculatedPaths = true;
         currentStartNode = startNode;
         //System.out.println("complete");
+        System.out.println("Dijkstra runtime: " + ((java.lang.System.currentTimeMillis() - startTime)/1000));
     }
 
     public List<Integer> shortestPathTo(int targetNode) {
@@ -217,7 +225,7 @@ public class Graph {
      * @return shortest Path from start to target
      */
     public List<Integer> startToTargetPath(int start, int target) {
-        this.Dijkstra(start);
+        this.Dijkstra(start, target);
         return this.shortestPathTo(target);
     }
 
@@ -227,9 +235,8 @@ public class Graph {
      * @return costs of shortest Path from start to target
      */
     public int pathCost(int start, int target) {
-        if (!calculatedPaths || !(currentStartNode == start)) {
-            this.Dijkstra(start);
-        }
+        this.Dijkstra(start, target);
+
         return costs[target];
 
     }
@@ -239,7 +246,15 @@ public class Graph {
      * @return minimal path costs for all nodes
      */
     public int[] oneToAll(int start) {
-        this.Dijkstra(start);
+        this.Dijkstra(start, -1);
         return costs;
+    }
+
+    public int batchQuery(int start, int target){
+        if(!calculatedPaths || currentStartNode != start){
+            return oneToAll(start)[target];
+        }else{
+            return costs[target];
+        }
     }
 }
