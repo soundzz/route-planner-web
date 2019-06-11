@@ -1,6 +1,7 @@
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.PrintWriter;
 
 
 public class Hub {
@@ -31,8 +32,17 @@ public class Hub {
 
         results = new int[query.size()/2];
         for (int i = 0; i < results.length; i++){
-            results[i] = graph.pathCost(query.get(i), query.get(i+1));
-            System.out.println(results[i]);
+            results[i] = graph.pathCost(query.get(2*i), query.get(2*i+1));
+            //System.out.println("From " + query.get(2*i) + " to " + query.get(2*i+1) + ": " + results[i]);
+        }
+        try{
+            PrintWriter solFile = new PrintWriter("output.sol");
+            for(int i = 0; i < results.length; i++){
+                solFile.println(results[i]);
+            }
+            solFile.close();
+        }catch (Exception e){
+            System.out.println(e.getClass());
         }
 
     }
@@ -41,15 +51,7 @@ public class Hub {
         Graph graph = new Graph("stgtregbz.fmi");
         Hub hub = new Hub();
         hub.query("Benchs/stgtregbz.que", graph);
-        /*System.out.println(graph.pathCost(0,1));
-        System.out.println(graph.pathCost(0,2));
-        System.out.println(graph.pathCost(0,3));
-        System.out.println(graph.pathCost(1,2));
-        System.out.println(graph.pathCost(1,3));
-        System.out.println(graph.pathCost(1,4));
-        System.out.println(graph.pathCost(3,4));
 
-         */
     }
 }
 
