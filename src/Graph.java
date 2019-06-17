@@ -50,7 +50,7 @@ public class Graph {
      * @param fileName ...
      */
     public void readGraphData(String fileName) {
-        long startTime = java.lang.System.currentTimeMillis();
+
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader("mapdata/" + fileName));
@@ -89,14 +89,12 @@ public class Graph {
                 edges[2][i] = Integer.parseInt(scanner.next()); //cost
             }
             scanner.close();
-            System.out.println("data read, time passed: " + ((java.lang.System.currentTimeMillis() - startTime)/1000));
             calculateOffset();
 
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("calculated offset, time passed: " + ((java.lang.System.currentTimeMillis() - startTime)/1000));
     }
 
     /**
@@ -158,7 +156,6 @@ public class Graph {
     }
 
     public void Dijkstra(int startNode, int targetNode) {
-        long startTime = java.lang.System.currentTimeMillis();
         //System.out.println("dijkstra");
 
         // initialize  parents, costs and priority queue
@@ -166,7 +163,7 @@ public class Graph {
         alreadyVisited = new int[numberOfNodes];
         while (!queue.isEmpty()) {
             int currentNode = queue.poll();  // gets node with min costs to start node and deletes currentNode
-            if(currentNode == targetNode){
+            if (currentNode == targetNode) {
                 break;
             }
             if (alreadyVisited[currentNode] == 1) {
@@ -193,7 +190,6 @@ public class Graph {
         calculatedPaths = true;
         currentStartNode = startNode;
         //System.out.println("complete");
-        System.out.println("Dijkstra runtime: " + ((java.lang.System.currentTimeMillis() - startTime)/1000));
     }
 
     public List<Integer> shortestPathTo(int targetNode) {
@@ -250,11 +246,15 @@ public class Graph {
         return costs;
     }
 
-    public int batchQuery(int start, int target){
-        if(!calculatedPaths || currentStartNode != start){
+    public int batchQuery(int start, int target) {
+        if (!calculatedPaths || currentStartNode != start) {
             return oneToAll(start)[target];
-        }else{
+        } else {
             return costs[target];
         }
+    }
+
+    public int getNumberOfNodes() {
+        return numberOfNodes;
     }
 }
