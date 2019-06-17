@@ -73,15 +73,19 @@ public class Graph {
             Scanner scanner = null;
 
             for (int i = 0; i < numberOfNodes; i++) {
+                reader.readLine();
+                /* Latitude/Longitude not yet needed
                 scanner = new Scanner(reader.readLine());
+
 
                 scanner.next();
                 scanner.next();
 
                 nodes[0][i] = Float.parseFloat(scanner.next()); //Latitude
                 nodes[1][i] = Float.parseFloat(scanner.next()); //Longitude
+                */
             }
-            scanner.close();
+            //scanner.close();
             for (int i = 0; i < numberOfEdges; i++) {
                 scanner = new Scanner(reader.readLine());
                 edges[0][i] = Integer.parseInt(scanner.next()); //srcID
@@ -187,8 +191,11 @@ public class Graph {
         /*for(int i =0; i < numberOfNodes; i++){
             System.out.println("Node: "+ i+ "  Costs: "+ costs[i]);
         }*/
-        calculatedPaths = true;
-        currentStartNode = startNode;
+        if (targetNode == -1) {
+            calculatedPaths = true;
+            currentStartNode = startNode;
+        }
+
         //System.out.println("complete");
     }
 
@@ -238,11 +245,42 @@ public class Graph {
     }
 
     /**
-     * @param start Start node
+     * @param startNode Start node
      * @return minimal path costs for all nodes
      */
-    public int[] oneToAll(int start) {
-        this.Dijkstra(start, -1);
+    public int[] oneToAll(int startNode) {
+
+        //System.out.println("dijkstra");
+
+        // initialize  parents, costs and priority queue
+        initialize(startNode);
+        alreadyVisited = new int[numberOfNodes];
+        while (!queue.isEmpty()) {
+            int currentNode = queue.poll();  // gets node with min costs to start node and deletes currentNode
+            if (alreadyVisited[currentNode] == 1) {
+                continue;
+            } else {
+                alreadyVisited[currentNode] = 1;
+            }
+            //System.out.println(currentNode); // REIHENFOLGE
+            offset = offsetArray[currentNode];
+            while (offset < numberOfEdges && edges[0][offset] == currentNode) {
+
+
+                updateCosts(currentNode, edges[1][offset], offset);
+
+                queue.add(edges[1][offset]);
+                offset++;
+            }
+        }
+        /*for(int i =0; i < numberOfNodes; i++){
+            System.out.println("Node: "+ i+ "  Costs: "+ costs[i]);
+        }*/
+            calculatedPaths = true;
+            currentStartNode = startNode;
+
+        //System.out.println("complete");
+
         return costs;
     }
 
