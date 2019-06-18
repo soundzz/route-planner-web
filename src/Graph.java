@@ -73,8 +73,9 @@ public class Graph {
             Scanner scanner = null;
 
             for (int i = 0; i < numberOfNodes; i++) {
-                reader.readLine();
-                /* Latitude/Longitude not yet needed
+
+                //reader.readLine();
+
                 scanner = new Scanner(reader.readLine());
 
 
@@ -83,7 +84,7 @@ public class Graph {
 
                 nodes[0][i] = Float.parseFloat(scanner.next()); //Latitude
                 nodes[1][i] = Float.parseFloat(scanner.next()); //Longitude
-                */
+
             }
             //scanner.close();
             for (int i = 0; i < numberOfEdges; i++) {
