@@ -2,6 +2,8 @@ Routenplaner program Phase 1 handover date: 20.06.2019
 
 GENERAL NOTES
 ————————————————————————
+- the folders mapdata and Benchs need to be in the folder src
+- execute build.sh in the src folder to open the program
 - the elapse time is in ms
 - create a folder mandate and a folder Benchs
 - the mapdata filename must be in the folder mapdata
