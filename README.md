@@ -3,16 +3,18 @@ Routenplaner program Phase 1 handover date: 20.06.2019
 GENERAL NOTES
 ————————————————————————
 - the folders mapdata and Benchs need to be in the folder src
-- execute build.sh in the src folder to open the program
+- execute build.sh in the src folder to open the program:
+	chmod -x build.sh
+	./build.sh)
 - the elapse time is in ms
 - create a folder mandate and a folder Benchs
 - the mapdata filename must be in the folder mapdata
 - the .que files must be in the folder Benchs
-- if the Query file is not found you are back in the main menu, check if the Query filname was right, or      if it is in the folder /Benchs 
-- if you load a different Query file than the mapdata file, you might get a index out of bounce exception if the Query file has lager node numbers then the nodes in the mapdata file 
+- if the Query file is not found you are back in the main menu, check if the Query filname was right, or if it is in the folder /Benchs 
+- if you load a different Query file than the mapdata file, you might get a index out of bounds exception if the Query file has lager node numbers then the nodes in the mapdata file 
 - If you can select the options 1,2,3, or 4, don’t put any other character
 - If you can enter a start node do not enter a number outside of 0- 25115476
-- We decided to divide the Query file input in two cases, one with many different start nodes and the other one with request with many start nodes that are the same (germany2.que, germany.que)
+- We decided to divide the Query file input in two cases, one with many different start nodes and the other one with request with many start nodes that are the same (for optimization purposes)
 
 ————————————————————————
 
