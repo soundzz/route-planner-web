@@ -4,5 +4,6 @@ mapdata/
 11.iml
 Benchs/
 output.sol
+.class
 #map data -> file size too large
 *.fmi
