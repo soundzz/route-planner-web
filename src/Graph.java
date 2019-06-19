@@ -4,27 +4,21 @@ import java.util.*;
 import java.util.Comparator;
 
 /**
- * the class Graph reads the File with the graph information
- * the array Nodes contains the nodes with length and width.
- * the array Edges contains the edges with starting node, target node and costs.
- * OffsetArray contains the offset, the first place of the edge in the array edges of a node.
- * numberOfNodes is the number of nodes in the graph.
- * numberOfEdges is the number of edges in the graph.
- * the arrays distance and predecessor are the information needed for the Dijkstra algorithm.
+ *
  */
 public class Graph {
     private int[] offsetArray;
     private float[][] nodes;
-    private int[][] edges;   // war mal float
+    private int[][] edges;
     private int numberOfNodes;
     private int numberOfEdges;
-    private int[] costs;  //int for now
-    private int[] parents;
-    private int[] alreadyVisited;
+    private int[] costs;  // from a node to a node, costs of the edges
+    private int[] parents; // parent nodes
+    private int[] alreadyVisited; // nodes that have already been visited (to skip to the next node)
     private PriorityQueue<Integer> queue;
-    private Comparator<Integer> nodeComparator;
-    private int offset;
-    private List<Integer> path;
+    private Comparator<Integer> nodeComparator;  // specified comparator to order the nodes in the priority queue
+    private int offset; // to save the current offset
+    private List<Integer> path; // to return the shortest path
 
     private boolean calculatedPaths;
     private int currentStartNode;
@@ -39,13 +33,9 @@ public class Graph {
     }
 
     /**
-     * readGraphData reads the file and saves the information in the arrays Nodes and Edges.
-     * the methodes works in the following way:
-     * 1) BufferedReader reads the file.
-     * 2) the first lines of the file gets skipped
-     * 3) a scanner gets created and goes through the lines
-     * <p>
-     * If no file is found the programm throws an exception.
+     * reads the Graph file in the folder mapdata
+     * saves the nodes, edges in the array nodes, edges
+     * throws file not found exception e, if the file is not found
      *
      * @param fileName ...
      */
@@ -104,8 +94,6 @@ public class Graph {
 
     /**
      * calculateOffset creates the Offset- Array
-     * we dont have the offset of a node that has no outgoing edges.
-     * we cant compare offsets with each other
      */
 
 
@@ -123,7 +111,11 @@ public class Graph {
 
     /**
      * initialize sets all costs to infinity except the starting node that has 0.
-     * We set all parents to null, maybe its not needed.
+     * We set all parents to null ( null = -1)
+     * We create the priority queue with a specific comparator
+     *
+     * @param start
+     *
      */
 
     public void initialize(int start) {
@@ -141,8 +133,11 @@ public class Graph {
 
 
     /**
-     * Dijkstra does the Dijkstra algorithm.
-     * First we overwrite the comparator of the priority queue.
+     * updateCosts updates the costs for the paths
+     *
+     * @param node_A
+     * @param node_B
+     * @param currentOffset
      */
 
     public void updateCosts(int node_A, int node_B, int currentOffset) {
@@ -159,6 +154,15 @@ public class Graph {
             parents[node_B] = node_A;
         }
     }
+
+    /**
+     * Dijkstra does the Dijkstra algorithm
+     * there are some outcommented print lines for debugging
+     * we chose the lazy insert method because we cant update the elements in the pq
+     *
+     * @param startNode
+     * @param targetNode
+     */
 
     public void Dijkstra(int startNode, int targetNode) {
         //System.out.println("dijkstra");
@@ -199,6 +203,14 @@ public class Graph {
 
         //System.out.println("complete");
     }
+
+    /**
+     *
+     *
+     * @param targetNode
+     * @return path
+     *
+     */
 
     public List<Integer> shortestPathTo(int targetNode) {
         path = new ArrayList<>();
@@ -246,6 +258,9 @@ public class Graph {
     }
 
     /**
+     * oneToAll does the one- to- all Dijkstra
+     *
+     * there are outcommented lines for debugging
      * @param startNode Start node
      * @return minimal path costs for all nodes
      */
@@ -277,13 +292,20 @@ public class Graph {
         /*for(int i =0; i < numberOfNodes; i++){
             System.out.println("Node: "+ i+ "  Costs: "+ costs[i]);
         }*/
-            calculatedPaths = true;
-            currentStartNode = startNode;
+        calculatedPaths = true;
+        currentStartNode = startNode;
 
         //System.out.println("complete");
 
         return costs;
     }
+
+    /**
+     *
+     * @param start
+     * @param target
+     * @return the costs to the target
+     */
 
     public int batchQuery(int start, int target) {
         if (!calculatedPaths || currentStartNode != start) {
@@ -292,6 +314,11 @@ public class Graph {
             return costs[target];
         }
     }
+
+    /**
+     *
+     * @return Number of Nodes (int)
+     */
 
     public int getNumberOfNodes() {
         return numberOfNodes;
