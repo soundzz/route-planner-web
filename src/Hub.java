@@ -4,9 +4,18 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 
 
+
+
 public class Hub {
     private List<Integer> query = new ArrayList<>(); //in pairs of start/target nodes at even/odd indices
     private int[] results;
+
+    /**
+     * query reads the query file and calculates the minimal costs
+     * @param fileName
+     * @param graph
+     * @param batch
+     */
 
     public void query(String fileName, Graph graph, boolean batch) {
 
@@ -52,6 +61,13 @@ public class Hub {
 
     }
 
+    /**
+     *  the main initializes most of the instances: file, graph, hub
+     *  it also prints the menu
+     *  some outcommmeted code is from the old version
+     *
+     * @param args
+     */
     public static void main(String args[]) {
         long time;
         System.out.println("|Enter mapdata filename (must be in /mapdata):");
