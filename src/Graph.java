@@ -102,6 +102,20 @@ public class Graph {
         }
     }
 
+    public int nearestNeighbor(float latitude, float longitude){
+        int solution = -1;
+        float bestDist = Float.MAX_VALUE;
+        float currentDist = 0;
+        for(int i = 0; i < numberOfNodes; i++){
+            currentDist = (float) (Math.pow(nodes[0][i] - latitude, 2) + Math.pow(nodes[1][i] - longitude, 2));
+            if(currentDist < bestDist){
+                bestDist = currentDist;
+                solution = i;
+            }
+        }
+        return solution;
+    }
+
     /**
      * calculateOffset creates the Offset- Array
      * we dont have the offset of a node that has no outgoing edges.
