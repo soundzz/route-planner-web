@@ -4,14 +4,13 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 
 
-
-
 public class Hub {
     private List<Integer> query = new ArrayList<>(); //in pairs of start/target nodes at even/odd indices
     private int[] results;
 
     /**
      * query reads the query file and calculates the minimal costs
+     *
      * @param fileName
      * @param graph
      * @param batch
@@ -62,13 +61,39 @@ public class Hub {
     }
 
     /**
-     *  the main initializes most of the instances: file, graph, hub
-     *  it also prints the menu
-     *  some outcommmeted code is from the old version
+     * the main initializes most of the instances: file, graph, hub
+     * it also prints the menu
+     * some outcommmeted code is from the old version
      *
      * @param args
      */
     public static void main(String args[]) {
+        Graph graph = new Graph("kd-demo.fmi");
+        Tree KDTree = new Tree(graph.getNodes());
+        ArrayList<Node> nodes = KDTree.getNodeList();
+        Iterator<Node> it = nodes.iterator();
+        while (it.hasNext()) {
+            Node node = it.next();
+            if (node.getRightChild() == null || node.getLeftChild() == null) {
+                if(node.getRightChild() == null && node.getLeftChild() != null){
+                    System.out.println("NodeID: " + node.getNodeID() + ", leftChild: " + node.getLeftChild().getNodeID());
+
+                }else if(node.getLeftChild() == null && node.getRightChild() != null){
+                    System.out.println("NodeID: " + node.getNodeID() + ", rightChild: " + node.getRightChild().getNodeID());
+
+                }
+            } else {
+                System.out.println("NodeID: " + node.getNodeID() + ", leftChild: " + node.getLeftChild().getNodeID() + ", rightChild: " + node.getRightChild().getNodeID());
+            }
+        }
+
+
+
+        /*Node result = KDTree.nearestNeighbor(53.82233040000000556f, 10.72339740000000140f);
+        System.out.println(result.getLongitude() + " " + result.getLatitude());
+        */
+        /*
+
         long time;
         System.out.println("|Enter mapdata filename (must be in /mapdata):");
         Scanner input = new Scanner(System.in);
@@ -130,7 +155,7 @@ public class Hub {
                     System.out.println(">> invalid input, try again");
             }
         }
-
+        */
         /*Graph graph = new Graph(args[1]);
         Hub hub = new Hub();
         switch(args[0]){

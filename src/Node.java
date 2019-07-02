@@ -25,4 +25,16 @@ public class Node {
         rightChild = child;
         return;
     }
+    public Node getLeftChild(){
+        return leftChild;
+    }
+    public Node getRightChild(){
+        return rightChild;
+    }
+    public float getDist(Node node){
+        return (float)Math.sqrt(Math.pow(this.latitude - node.latitude, 2) + Math.pow(this.longitude - node.longitude, 2));
+    }
+    public int getNodeID(){
+        return nodeID;
+    }
 }

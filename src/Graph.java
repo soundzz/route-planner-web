@@ -313,6 +313,9 @@ public class Graph {
 
         return costs;
     }
+    public float[][] getNodes(){
+        return nodes;
+    }
 
     /**
      *
