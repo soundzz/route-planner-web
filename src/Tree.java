@@ -59,59 +59,87 @@ public class Tree {
 //are left child right child = null?
 
 
-    private Node nodeChecker(Node node, float bestDist, float latitude, float longitude, int depth){
+    private Node nodeChecker(Node node, float bestDist, float latitude, float longitude, int depth) {
         Node result = null;
+        float dist = 0;
         int axis = depth % 2;
-        if(axis == 0){
-            float dist = (float)Math.pow(node.getLatitude()-latitude, 2);
-            if(dist < bestDist){
+        if (axis == 0 && node != null) {
+            dist = (float) Math.pow(node.getLatitude() - latitude, 2);
+            if (dist < bestDist) {
                 bestDist = dist;
                 result = node;
-                float nextDistLeft =(float) Math.pow(node.getLeftChild().getLatitude() - latitude,2);
-                float nextDistRight =(float) Math.pow(node.getRightChild().getLatitude() - latitude,2);
-                float center_y = result.getLatitude();
 
-                if (nextDistLeft < bestDist && nextDistLeft < nextDistRight){
-                    bestDist= nextDistLeft;
-                    result = node.getLeftChild();
-                    nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    //Circle around the current result to check if a point on the other side of the split is closer
-                    if (bestDist > Math.pow(center_y - node.getLatitude(),2)){
-                        nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    }
-                }else if(nextDistRight < bestDist){
-                    bestDist = nextDistRight;
-                    result = node.getRightChild();
-                    nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    //Circle around the current result to check if a point on the other side of the split is closer
-                    if (bestDist > Math.pow(center_y - node.getLatitude(),2)){
-                        nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    }
+                float nextDistLeft;
+                float nextDistRight;
+                float center_y = 0;
+                if (node.getLeftChild() == null) {
+                    nextDistLeft = Float.MAX_VALUE;
+                } else {
+                    nextDistLeft = (float) Math.pow(node.getLeftChild().getLatitude() - latitude, 2);
                 }
-            }
-        }else if(axis == 1){
-            float dist = (float) Math.pow(node.getLongitude()- longitude, 2);
-            if (dist < bestDist){
-                bestDist =dist;
-                result = node;
-                float nextDistLeft =(float) Math.pow(node.getLeftChild().getLongitude() - longitude,2);
-                float nextDistRight =(float) Math.pow(node.getRightChild().getLongitude() - longitude,2);
-                float center_x = result.getLongitude();
+                if (node.getRightChild() == null) {
+                    nextDistRight = Float.MAX_VALUE;
+                } else {
+                    nextDistRight = (float) Math.pow(node.getRightChild().getLatitude() - latitude, 2);
+                }
 
-                if (nextDistLeft < bestDist && nextDistLeft < nextDistRight){
+                center_y = result.getLatitude();
+
+                if (nextDistLeft < bestDist && nextDistLeft < nextDistRight) {
                     bestDist = nextDistLeft;
                     result = node.getLeftChild();
                     nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
                     //Circle around the current result to check if a point on the other side of the split is closer
-                    if (bestDist > Math.pow(center_x - node.getLongitude(),2)){
+                    if (bestDist > Math.pow(center_y - node.getLatitude(), 2)) {
                         nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
                     }
-                }else if(nextDistRight < bestDist){
+                } else if (nextDistRight < bestDist) {
                     bestDist = nextDistRight;
                     result = node.getRightChild();
                     nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
                     //Circle around the current result to check if a point on the other side of the split is closer
-                    if (bestDist > Math.pow(center_x - node.getLongitude(),2)){
+                    if (bestDist > Math.pow(center_y - node.getLatitude(), 2)) {
+                        nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
+                    }
+                }
+            }
+        } else if (axis == 1 && node != null) {
+            dist = (float) Math.pow(node.getLongitude() - longitude, 2);
+            if (dist < bestDist) {
+                bestDist = dist;
+                result = node;
+                float nextDistLeft;
+                float nextDistRight;
+                float center_x = 0;
+                if(node.getLeftChild() == null){
+                    nextDistLeft = Float.MAX_VALUE;
+                }else{
+                    nextDistLeft = (float) Math.pow(node.getLeftChild().getLongitude() - longitude, 2);
+                }
+                if(node.getRightChild() == null){
+                    nextDistRight = Float.MAX_VALUE;
+                }else{
+                    nextDistRight = (float) Math.pow(node.getRightChild().getLongitude() - longitude, 2);
+                }
+
+                    center_x = result.getLongitude();
+
+
+
+                if (nextDistLeft < bestDist && nextDistLeft < nextDistRight) {
+                    bestDist = nextDistLeft;
+                    result = node.getLeftChild();
+                    nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
+                    //Circle around the current result to check if a point on the other side of the split is closer
+                    if (bestDist > Math.pow(center_x - node.getLongitude(), 2)) {
+                        nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
+                    }
+                } else if (nextDistRight < bestDist) {
+                    bestDist = nextDistRight;
+                    result = node.getRightChild();
+                    nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
+                    //Circle around the current result to check if a point on the other side of the split is closer
+                    if (bestDist > Math.pow(center_x - node.getLongitude(), 2)) {
                         nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
                     }
                 }
@@ -122,7 +150,7 @@ public class Tree {
         return result;
     }
 
-    public ArrayList<Node> getNodeList(){
+    public ArrayList<Node> getNodeList() {
         return nodeList;
     }
 
@@ -167,8 +195,6 @@ public class Tree {
      }
      */
     //------------------------------------------------------------
-
-
 
 
 }

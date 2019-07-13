@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
 
-
 public class Hub {
     private List<Integer> query = new ArrayList<>(); //in pairs of start/target nodes at even/odd indices
     private int[] results;
@@ -86,7 +85,14 @@ public class Hub {
                 System.out.println("NodeID: " + node.getNodeID() + ", leftChild: " + node.getLeftChild().getNodeID() + ", rightChild: " + node.getRightChild().getNodeID());
             }
         }
+        float x_coord = (float) Math.random() * 10;
+        float y_coord = (float) Math.random() * 10;
 
+        System.out.println("Nearest neighbor of " + x_coord + ", " + y_coord);
+        Node neighbor = KDTree.nearestNeighbor(x_coord, y_coord);
+        System.out.println(neighbor.getLatitude() + " | " + neighbor.getLongitude());
+        int benchmark = graph.nearestNeighbor(x_coord, y_coord);
+        System.out.println("Solution: " + graph.getNodes()[0][benchmark] + " | " + graph.getNodes()[1][benchmark]);
 
 
         /*Node result = KDTree.nearestNeighbor(53.82233040000000556f, 10.72339740000000140f);
