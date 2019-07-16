@@ -12,10 +12,10 @@ public class Node {
     }
 
     public float getLatitude(){
-        return latitude;
+        return longitude ;
     }
     public float getLongitude(){
-        return longitude;
+        return  latitude;
     }
     public void setLeftChild(Node child){
         leftChild = child;
