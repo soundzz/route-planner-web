@@ -31,13 +31,13 @@ public class Tree {
 
         for (int i = 0; i < children.size(); i++) {
             Node currentNode = children.get(i);
-            if (axis == 0) {
+            if (axis == 1) {
                 if (splitNode.getLatitude() > currentNode.getLatitude()) {
                     leftChildren.add(currentNode);
                 } else if (splitNode.getLatitude() <= currentNode.getLatitude() && currentNode != splitNode) {
                     rightChildren.add(currentNode);
                 }
-            } else if (axis == 1) {
+            } else if (axis == 0) {
 
                 if (splitNode.getLongitude() > currentNode.getLongitude()) {
                     leftChildren.add(currentNode);
@@ -54,147 +54,365 @@ public class Tree {
     }
 
     public Node nearestNeighbor(float latitude, float longitude) {
-        return nodeChecker(root, Float.MAX_VALUE, latitude, longitude, 0);
+        return NN(root, latitude, longitude, 1, Float.MAX_VALUE,root);
     }
 //are left child right child = null?
 
 
-    private Node nodeChecker(Node node, float bestDist, float latitude, float longitude, int depth) {
-        Node result = null;
-        float dist = 0;
+    public Node NN ( Node node, float  longitude, float latitude, int depth, float distance, Node oldbest ){
+        // x is the longitude, y is the latidue
+        // the depth is needed for the axes to divide in x and y, the start depth is 0
+        // distance is the euclidean distance initialzied with Float.MAX_ Value
+
+        // initializing the variables
+        Node currentresult = node;
+        Node result =oldbest;
+        Node test = null;
         int axis = depth % 2;
-        if (axis == 0 && node != null) {
+        float currentdist = Float.MAX_VALUE;
+        float testdist;
+        float resultdist= Float.MAX_VALUE;
+
+
+
+
+
+        // case 1: axis = 1, we check the longitude
+
+        if (axis == 1 && node != null){
+            currentdist = (float) Math.sqrt( Math.pow( node.getLongitude() - longitude,2) + Math.pow(node.getLatitude() - latitude ,2));
+            System.out.println("Test root node x " + node.getNodeID() +" " +node.getLongitude() );
+            if (node.getLongitude() > longitude && node.getLeftChild() != null){
+                System.out.println("Test left child, x Achse: " + node.getNodeID() +" " + longitude);
+                float distleftChild = (float) Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude,2) + Math.pow(node.getLeftChild().getLongitude() -longitude,2));
+                    currentresult = NN(node.getLeftChild(), longitude, latitude, depth + 1, currentdist, node);
+                    currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
+
+
+                // hypersphere to check if there is a false nearest neighbour
+
+                if (currentdist > Math.sqrt(Math.pow(currentresult.getLatitude()-latitude,2)) && node.getRightChild() != null){
+                    // geht in hs und speichtert test
+                    System.out.println("Test left child, x Achse hs und right: " + node.getNodeID());
+                    test =  NN(node.getRightChild(), longitude, latitude, depth, currentdist, node);
+                    testdist = (float) Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
+                    if (currentdist > testdist){
+                        //test ist jetzt node
+                        currentresult = test;
+                    }
+                }
+
+
+            } else {
+                if (node.getRightChild()!= null && node.getLongitude() < longitude) {
+                    float distrightChild = (float) Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
+                        System.out.println("Test right child, x Achse: " + node.getNodeID());
+                        currentresult = NN(node.getRightChild(), longitude, latitude, depth + 1, currentdist, node);
+                        currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
+
+                }
+                // hypersphere to check if there is a false nearest neighbour
+
+                if (currentdist > Math.sqrt(Math.pow(currentresult.getLatitude()-latitude,2)) && node.getLeftChild() != null ){
+                    test =  NN(node.getLeftChild(), longitude, latitude, depth, currentdist, node);
+                    testdist = (float) Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
+                    if (currentdist > testdist){
+                        currentresult = test;
+                    }
+                }
+        }
+
+        // case 2: axis = 0, we check the latitude
+        // is the point not as high in the latitude, it is a left child, if the latitude is bigger its a right child
+
+        } else if ( axis == 0 && node != null) {
+            currentdist = (float) Math.sqrt( Math.pow( node.getLongitude() - longitude,2) + Math.pow(node.getLatitude() - latitude ,2));
+            System.out.println("Test root node y " + node.getNodeID() +" "+latitude);
+            if ( node.getLatitude() > latitude && node.getLeftChild() != null) {
+                float distleftChild = (float) Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude, 2) + Math.pow(node.getLeftChild().getLongitude() - longitude, 2));
+                System.out.println("Test left child, y Achse: +" + node.getNodeID());
+                currentresult = NN(node.getLeftChild(), longitude, latitude, depth + 1, currentdist, node);
+                currentdist = (float) Math.sqrt(Math.pow(currentresult.getLongitude() - longitude, 2) + Math.pow(currentresult.getLatitude() - latitude, 2));
+            }
+
+                // hypersphere to check if there is a false nearest neighbour
+
+                if (currentdist > Math.sqrt(Math.pow(currentresult.getLongitude()-longitude,2)) && node.getRightChild() != null ){
+                    test =  NN(node.getRightChild(), longitude, latitude, depth, currentdist, node);
+                    testdist = (float) Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
+                    if (currentdist > testdist ){
+                        currentresult = test;
+                    }
+                }
+
+
+            } else {
+                if (node.getRightChild() != null && node.getLatitude() < latitude) {
+                    float distrightChild = (float) Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
+                        System.out.println("Test right child, y Achse: " + node.getNodeID());
+                        currentresult = NN(node.getRightChild(), longitude, latitude, depth + 1, currentdist, node);
+                        currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
+                }
+                // hypersphere to check if there is a false nearest neighbour
+
+                if (currentdist > Math.sqrt(Math.pow(currentresult.getLongitude()-longitude,2)) && node.getLeftChild() != null){
+                    test =  NN(node.getLeftChild(), longitude, latitude, depth, currentdist, node);
+                    testdist = (float) Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
+                    if (currentdist > testdist){
+                        currentresult = test;
+                    }
+                }
+
+
+            }
+        if ( currentresult != null && result != null ) {
+            System.out.println("Test current best1 : " + currentresult.getNodeID());
+
+        }else if( result != null){
+            System.out.println("Test result begin1: " + result.getNodeID());
+        }
+
+
+
+        // check if we already have the best node
+
+        if(node != null && result !=null){
+            resultdist= (float) Math.sqrt(Math.pow(result.getLatitude()-latitude,2)+Math.pow(result.getLongitude()-longitude,2));
+            currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
+            if(resultdist < currentdist){
+                currentresult =result;
+            }
+            if (node.getRightChild() != null){
+                float distrightChild = (float) Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
+                if(distrightChild < currentdist){
+                    currentresult = NN(node.getRightChild(), longitude, latitude, depth + 1, distrightChild, node);
+                }
+            }
+            if (node.getLeftChild() != null){
+                float distleftChild = (float) Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude, 2) + Math.pow(node.getLeftChild().getLongitude() - longitude, 2));
+                if (distleftChild < currentdist){
+                    currentresult = NN(node.getLeftChild(), longitude, latitude, depth, distleftChild, node);
+                }
+            }
+        }
+        if ( currentresult != null && result != null ) {
+            System.out.println("Test current best2 : " + currentresult.getNodeID());
+
+        }else if( result != null){
+            System.out.println("Test result begin2: " + result.getNodeID());
+        }
+
+
+
+        return currentresult;
+    }
+
+    public Node hypersphere (Node node, float bestDist, float latitude, float longitude ){
+       /* axis = 0
+        //Circle around the current result to check if a point on the other side of the split is closer
+        if (bestDist > Math.pow(result.getLatitude() - node.getLatitude(), 2)) {
+
+            Node hs_node= nodeChecker(node.getRightChild(), bestDist, latitude, longitude, 0);
+            if(hs_node != null) {
+                bestchildDist = (float) (Math.pow(hs_node.getLatitude() - latitude, 2)+ Math.pow(hs_node.getLongitude() -longitude,2));
+                if (bestchildDist < bestDist){
+                    result = hs_node;
+                }
+            }
+        }
+
+        //Circle around the current result to check if a point on the other side of the split is closer
+                    if (bestDist > (Math.pow(center_y - node.getLatitude(), 2)+ Math.pow(center_x -node.getLongitude(),2) )) {
+                        Node hs_node = nodeChecker(node.getLeftChild(), bestDist, latitude, longitude, 0);
+                        if (hs_node != null) {
+                            bestchildDist = (float) (Math.pow(hs_node.getLatitude() - latitude, 2) + Math.pow(hs_node.getLongitude() - longitude, 2));
+                            if (bestchildDist < bestDist) {
+                                result = hs_node;
+                            }
+                        }
+                    }
+
+                    ____
+
+
+                    axis = 1
+
+                    //Circle around the current result to check if a point on the other side of the split is closer
+                    if (bestDist > Math.pow(result.getLatitude() - node.getLatitude(), 2)) {
+
+                        Node hs_node= nodeChecker(node.getRightChild(), bestDist, latitude, longitude, 0);
+                        if(hs_node != null) {
+                            bestchildDist = (float) (Math.pow(hs_node.getLatitude() - latitude, 2)+ Math.pow(hs_node.getLongitude() -longitude,2));
+                            if (bestchildDist < bestDist){
+                                result = hs_node;
+                            }
+                        }
+                    }
+
+
+                     //Circle around the current result to check if a point on the other side of the split is closer
+                    if (bestDist > (Math.pow(center_y - node.getLatitude(), 2)+ Math.pow(center_x -node.getLongitude(),2) )) {
+                        Node hs_node = nodeChecker(node.getLeftChild(), bestDist, latitude, longitude, 0);
+                        if (hs_node != null) {
+                            bestchildDist = (float) (Math.pow(hs_node.getLatitude() - latitude, 2) + Math.pow(hs_node.getLongitude() - longitude, 2));
+                            if (bestchildDist < bestDist) {
+                                result = hs_node;
+                            }
+                        }
+                    }
+
+        */
+       return null;
+    }
+
+/*
+    private Node nodeChecker(Node node, float bestDist, float latitude, float longitude, int depth) {
+        // starting values for the variables
+        Node result = node;
+        if (node != null ) {
+
+
+            System.out.println("NodeID from root: " + node.getNodeID());
+        }
+        boolean leftside = false;
+        float radius = 0;
+        //float bestchildDist= Float.MAX_VALUE;
+        Node hs = null; // hypersphere
+        float dist = 0;
+
+        int axis = depth % 2;
+        // case 1 the depths is 0, we check the latitude in the tree
+
+        if (axis == 0 && node != null) { // y
             dist = (float) Math.pow(node.getLatitude() - latitude, 2);
+
             if (dist < bestDist) {
                 bestDist = dist;
                 result = node;
-
+                radius = (float) Math.sqrt(Math.pow(node.getLatitude() - latitude, 2) + Math.pow(node.getLongitude() - longitude, 2));
+                System.out.println("NodeID: test a0: " + result.getNodeID());
                 float nextDistLeft;
                 float nextDistRight;
-                float center_y = 0;
+                float bestDistRadiusLeft = Float.MAX_VALUE;
+                float bestDistRadiusRight = Float.MAX_VALUE;
+
+                //check children
                 if (node.getLeftChild() == null) {
                     nextDistLeft = Float.MAX_VALUE;
+                    System.out.println("left is null");
                 } else {
                     nextDistLeft = (float) Math.pow(node.getLeftChild().getLatitude() - latitude, 2);
                 }
                 if (node.getRightChild() == null) {
                     nextDistRight = Float.MAX_VALUE;
+                    System.out.println("right is null");
                 } else {
                     nextDistRight = (float) Math.pow(node.getRightChild().getLatitude() - latitude, 2);
                 }
 
-                center_y = result.getLatitude();
+                // center_y = result.getLatitude(); // radius from our point
+
 
                 if (nextDistLeft < bestDist && nextDistLeft < nextDistRight) {
                     bestDist = nextDistLeft;
-                    result = node.getLeftChild();
-                    nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    //Circle around the current result to check if a point on the other side of the split is closer
-                    if (bestDist > Math.pow(center_y - node.getLatitude(), 2)) {
-                        nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    }
+                    leftside = true;
+                    depth = depth +1;
+                    result = nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, depth );
+                    System.out.println("NodeID: test a0 left" + result.getNodeID());
+
                 } else if (nextDistRight < bestDist) {
                     bestDist = nextDistRight;
-                    result = node.getRightChild();
-                    nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    //Circle around the current result to check if a point on the other side of the split is closer
-                    if (bestDist > Math.pow(center_y - node.getLatitude(), 2)) {
-                        nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    }
+                    leftside = false;
+                    depth = depth +1;
+                    result = nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, depth );
+                    System.out.println("NodeID: test a0 right" + result.getNodeID());
+                }
+
+
+            }
+
+            // check if there is a node in the circle of the point that is closer but no in the branch
+            if (radius > Math.sqrt(Math.pow(latitude, 2) + Math.pow(result.getLatitude(), 2)) && leftside && result != null) {
+                hs = nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, depth);
+                if (radius > Math.sqrt(Math.pow(hs.getLongitude() - longitude, 2) + Math.pow(hs.getLatitude() - latitude, 2)) && hs != null) {
+                    result = hs;
+                    System.out.println("NodeID: test a0 hs" + result.getNodeID());
+                }
+            } if (radius > Math.sqrt(Math.pow(latitude, 2) + Math.pow(result.getLatitude(), 2)) && !leftside && result != null) {
+                hs = nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, depth);
+                if (radius > Math.sqrt(Math.pow(hs.getLongitude() - longitude, 2) + Math.pow(hs.getLatitude() - latitude, 2)) && hs != null) {
+                    result = hs;
+                    System.out.println("NodeID: test a0 hs 2" + result.getNodeID());
                 }
             }
-        } else if (axis == 1 && node != null) {
+
+
+        } else if (axis == 1 && node != null) { // x, case 2 with axis = 1, we check the longitude
             dist = (float) Math.pow(node.getLongitude() - longitude, 2);
             if (dist < bestDist) {
                 bestDist = dist;
                 result = node;
+                radius = (float) (Math.pow(node.getLatitude() - latitude, 2) + Math.pow(node.getLongitude() - longitude, 2));
+                System.out.println("NodeID: test" + result.getNodeID());
                 float nextDistLeft;
                 float nextDistRight;
-                float center_x = 0;
-                if(node.getLeftChild() == null){
+                if (node.getLeftChild() == null) {
                     nextDistLeft = Float.MAX_VALUE;
-                }else{
+                    System.out.println("left is null");
+                } else {
                     nextDistLeft = (float) Math.pow(node.getLeftChild().getLongitude() - longitude, 2);
                 }
-                if(node.getRightChild() == null){
+                if (node.getRightChild() == null) {
                     nextDistRight = Float.MAX_VALUE;
-                }else{
+                    System.out.println("right is null");
+                } else {
                     nextDistRight = (float) Math.pow(node.getRightChild().getLongitude() - longitude, 2);
                 }
 
-                    center_x = result.getLongitude();
-
+                // center_x = result.getLongitude();
 
 
                 if (nextDistLeft < bestDist && nextDistLeft < nextDistRight) {
                     bestDist = nextDistLeft;
-                    result = node.getLeftChild();
-                    nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    //Circle around the current result to check if a point on the other side of the split is closer
-                    if (bestDist > Math.pow(center_x - node.getLongitude(), 2)) {
-                        nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    }
+                    leftside = true;
+                    depth = depth +1;
+                    result = nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, depth );
+                    System.out.println("NodeID, left child test: " + result.getNodeID());
                 } else if (nextDistRight < bestDist) {
                     bestDist = nextDistRight;
-                    result = node.getRightChild();
-                    nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    //Circle around the current result to check if a point on the other side of the split is closer
-                    if (bestDist > Math.pow(center_x - node.getLongitude(), 2)) {
-                        nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-                    }
+                    leftside = false;
+                    depth = depth +1;
+                    result = nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, depth );
+                    System.out.println("NodeID, right child test: " + result.getNodeID());
+
                 }
 
             }
+
+            // check if there is a node in the circle of the point that is closer but no in the branch
+            if (radius > Math.sqrt(Math.pow(longitude, 2) + Math.pow(result.getLongitude(), 2)) && leftside && result != null) {
+                hs = nodeChecker(node.getRightChild(), Float.MAX_VALUE, latitude, longitude, depth);
+                if (radius > Math.sqrt(Math.pow(hs.getLongitude() - longitude, 2) + Math.pow(hs.getLatitude() - latitude, 2)) && hs != null) {
+                    result = hs;
+                }
+            } else if (radius > Math.sqrt(Math.pow(longitude, 2) + Math.pow(result.getLongitude(), 2)) && !leftside && result != null) {
+                hs = nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, depth);
+                if (radius > Math.sqrt(Math.pow(hs.getLongitude() - longitude, 2) + Math.pow(hs.getLatitude() - latitude, 2)) && hs != null) {
+                    result = hs;
+                    System.out.println("NodeID, hs test: " + result.getNodeID());
+                }
+            }
         }
 
+
         return result;
-    }
+    }*/
 
     public ArrayList<Node> getNodeList() {
         return nodeList;
     }
 
 
-    //__________________________________ohne hypersphere__________________________________
-    /**
-     private Node nodeChecker(Node node, float bestDist, float latitude, float longitude, int depth){
-     Node result = null;
-     int axis = depth % 2;
-     if(axis == 0){
-     float dist = (float)Math.pow(node.getLatitude()-latitude, 2);
-     if(dist < bestDist){
-     bestDist = dist;
-     result = node;
-     float nextDistLeft =(float) Math.pow(node.getLeftChild().getLatitude() - latitude,2);
-     float nextDistRight =(float) Math.pow(node.getRightChild().getLatitude() - latitude,2);
-     if (nextDistLeft < bestDist && nextDistLeft < nextDistRight){
-     nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-     }else if(nextDistRight < bestDist){
-     nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-     }
-     }
-     }else if(axis == 1){
-     float dist = (float) Math.pow(node.getLongitude()- longitude, 2);
-     if (dist < bestDist){
-     bestDist =dist;
-     result = node;
-     float nextDistLeft =(float) Math.pow(node.getLeftChild().getLongitude() - longitude,2);
-     float nextDistRight =(float) Math.pow(node.getRightChild().getLongitude() - longitude,2);
-     if (nextDistLeft < bestDist && nextDistLeft < nextDistRight){
-     nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-     }else if(nextDistRight < bestDist){
-     nodeChecker(node.getLeftChild(), Float.MAX_VALUE, latitude, longitude, 0);
-     }
-
-     }
-     }
-
-
-
-     return result;
-     }
-     */
-    //------------------------------------------------------------
 
 
 }
