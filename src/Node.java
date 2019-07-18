@@ -2,19 +2,19 @@ public class Node {
     private Node leftChild;
     private Node rightChild;
     private int nodeID;
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
 
-    public Node(int ID, float lat, float lon){
+    public Node(int ID, double lat, double lon){
         nodeID = ID;
         latitude = lat;
         longitude = lon;
     }
 
-    public float getLatitude(){
+    public double getLatitude(){
         return longitude ;
     }
-    public float getLongitude(){
+    public double getLongitude(){
         return  latitude;
     }
     public void setLeftChild(Node child){

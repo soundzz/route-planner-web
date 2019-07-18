@@ -8,7 +8,7 @@ import java.util.Comparator;
  */
 public class Graph {
     private int[] offsetArray;
-    private float[][] nodes;
+    private double[][] nodes;
     private int[][] edges;
     private int numberOfNodes;
     private int numberOfEdges;
@@ -57,7 +57,7 @@ public class Graph {
 
             numberOfNodes = Integer.parseInt(reader.readLine());
             numberOfEdges = Integer.parseInt(reader.readLine());
-            nodes = new float[2][numberOfNodes];
+            nodes = new double[2][numberOfNodes];
             edges = new int[3][numberOfEdges];
 
             Scanner scanner = null;
@@ -72,8 +72,8 @@ public class Graph {
                 scanner.next();
                 scanner.next();
 
-                nodes[0][i] = Float.parseFloat(scanner.next()); //Latitude
-                nodes[1][i] = Float.parseFloat(scanner.next()); //Longitude
+                nodes[0][i] = Double.parseDouble(scanner.next()); //Latitude
+                nodes[1][i] = Double.parseDouble(scanner.next()); //Longitude
 
             }
             //scanner.close();
@@ -92,12 +92,12 @@ public class Graph {
         }
     }
 
-    public int nearestNeighbor(float latitude, float longitude){
+    public int nearestNeighbor(double latitude, double longitude){
         int solution = -1;
-        float bestDist = Float.MAX_VALUE;
-        float currentDist = 0;
+        double bestDist = Float.MAX_VALUE;
+        double currentDist = 0;
         for(int i = 0; i < numberOfNodes; i++){
-            currentDist = (float) (Math.pow(nodes[0][i] - latitude, 2) + Math.pow(nodes[1][i] - longitude, 2));
+            currentDist = Math.pow(nodes[0][i] - latitude, 2) + Math.pow(nodes[1][i] - longitude, 2);
             if(currentDist < bestDist){
                 bestDist = currentDist;
                 solution = i;
@@ -313,7 +313,7 @@ public class Graph {
 
         return costs;
     }
-    public float[][] getNodes(){
+    public double[][] getNodes(){
         return nodes;
     }
 

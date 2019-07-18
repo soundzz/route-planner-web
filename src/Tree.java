@@ -5,7 +5,7 @@ public class Tree {
     private Node root;
     private ArrayList<Node> nodeList = new ArrayList<Node>();
 
-    public Tree(float[][] nodes) {
+    public Tree(double[][] nodes) {
         for (int i = 0; i < nodes[1].length; i++) {
             nodeList.add(new Node(i, nodes[0][i], nodes[1][i]));
         }
@@ -53,13 +53,13 @@ public class Tree {
         return splitNode;
     }
 
-    public Node nearestNeighbor(float latitude, float longitude) {
+    public Node nearestNeighbor(double latitude, double longitude) {
         return NN(root, latitude, longitude, 1, Float.MAX_VALUE,root);
     }
 //are left child right child = null?
 
 
-    public Node NN ( Node node, float  longitude, float latitude, int depth, float distance, Node oldbest ){
+    public Node NN ( Node node, double  longitude, double latitude, int depth, double distance, Node oldbest ){
         // x is the longitude, y is the latidue
         // the depth is needed for the axes to divide in x and y, the start depth is 0
         // distance is the euclidean distance initialzied with Float.MAX_ Value
@@ -69,9 +69,9 @@ public class Tree {
         Node result =oldbest;
         Node test = null;
         int axis = depth % 2;
-        float currentdist = Float.MAX_VALUE;
-        float testdist;
-        float resultdist= Float.MAX_VALUE;
+        double currentdist = Float.MAX_VALUE;
+        double testdist;
+        double resultdist= Float.MAX_VALUE;
 
 
 
@@ -80,13 +80,13 @@ public class Tree {
         // case 1: axis = 1, we check the longitude
 
         if (axis == 1 && node != null){
-            currentdist = (float) Math.sqrt( Math.pow( node.getLongitude() - longitude,2) + Math.pow(node.getLatitude() - latitude ,2));
+            currentdist = Math.sqrt( Math.pow( node.getLongitude() - longitude,2) + Math.pow(node.getLatitude() - latitude ,2));
             //System.out.println("Test root node x " + node.getNodeID() +" " +node.getLongitude() );
             if (node.getLongitude() > longitude && node.getLeftChild() != null){
                 //System.out.println("Test left child, x Achse: " + node.getNodeID() +" " + longitude);
-                float distleftChild = (float) Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude,2) + Math.pow(node.getLeftChild().getLongitude() -longitude,2));
+                double distleftChild = Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude,2) + Math.pow(node.getLeftChild().getLongitude() -longitude,2));
                     currentresult = NN(node.getLeftChild(), longitude, latitude, depth + 1, currentdist, node);
-                    currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
+                    currentdist = Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
 
 
                 // hypersphere to check if there is a false nearest neighbour
@@ -95,7 +95,7 @@ public class Tree {
                     // geht in hs und speichtert test
                     //System.out.println("Test left child, x Achse hs und right: " + node.getNodeID());
                     test =  NN(node.getRightChild(), longitude, latitude, depth, currentdist, node);
-                    testdist = (float) Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
+                    testdist = Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
                     if (currentdist > testdist){
                         //test ist jetzt node
                         currentresult = test;
@@ -105,10 +105,10 @@ public class Tree {
 
             } else {
                 if (node.getRightChild()!= null && node.getLongitude() < longitude) {
-                    float distrightChild = (float) Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
+                    double distrightChild = Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
                         //System.out.println("Test right child, x Achse: " + node.getNodeID());
                         currentresult = NN(node.getRightChild(), longitude, latitude, depth + 1, currentdist, node);
-                        currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
+                        currentdist = Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
 
                 }
                 // hypersphere to check if there is a false nearest neighbour
@@ -129,17 +129,17 @@ public class Tree {
             currentdist = (float) Math.sqrt( Math.pow( node.getLongitude() - longitude,2) + Math.pow(node.getLatitude() - latitude ,2));
             //System.out.println("Test root node y " + node.getNodeID() +" "+latitude);
             if ( node.getLatitude() > latitude && node.getLeftChild() != null) {
-                float distleftChild = (float) Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude, 2) + Math.pow(node.getLeftChild().getLongitude() - longitude, 2));
+                double distleftChild = Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude, 2) + Math.pow(node.getLeftChild().getLongitude() - longitude, 2));
                 //System.out.println("Test left child, y Achse: +" + node.getNodeID());
                 currentresult = NN(node.getLeftChild(), longitude, latitude, depth + 1, currentdist, node);
-                currentdist = (float) Math.sqrt(Math.pow(currentresult.getLongitude() - longitude, 2) + Math.pow(currentresult.getLatitude() - latitude, 2));
+                currentdist = Math.sqrt(Math.pow(currentresult.getLongitude() - longitude, 2) + Math.pow(currentresult.getLatitude() - latitude, 2));
             }
 
                 // hypersphere to check if there is a false nearest neighbour
 
                 if (currentdist > Math.sqrt(Math.pow(currentresult.getLongitude()-longitude,2)) && node.getRightChild() != null ){
                     test =  NN(node.getRightChild(), longitude, latitude, depth, currentdist, node);
-                    testdist = (float) Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
+                    testdist = Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
                     if (currentdist > testdist ){
                         currentresult = test;
                     }
@@ -148,16 +148,16 @@ public class Tree {
 
             } else {
                 if (node.getRightChild() != null && node.getLatitude() < latitude) {
-                    float distrightChild = (float) Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
+                    double distrightChild = Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
                         //System.out.println("Test right child, y Achse: " + node.getNodeID());
                         currentresult = NN(node.getRightChild(), longitude, latitude, depth + 1, currentdist, node);
-                        currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
+                        currentdist = Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
                 }
                 // hypersphere to check if there is a false nearest neighbour
 
                 if (currentdist > Math.sqrt(Math.pow(currentresult.getLongitude()-longitude,2)) && node.getLeftChild() != null){
                     test =  NN(node.getLeftChild(), longitude, latitude, depth, currentdist, node);
-                    testdist = (float) Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
+                    testdist = Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
                     if (currentdist > testdist){
                         currentresult = test;
                     }
@@ -177,19 +177,19 @@ public class Tree {
         // check if we already have the best node
 
         if(node != null && result !=null){
-            resultdist= (float) Math.sqrt(Math.pow(result.getLatitude()-latitude,2)+Math.pow(result.getLongitude()-longitude,2));
-            currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
+            resultdist= Math.sqrt(Math.pow(result.getLatitude()-latitude,2)+Math.pow(result.getLongitude()-longitude,2));
+            currentdist = Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
             if(resultdist < currentdist){
                 currentresult =result;
             }
             if (node.getRightChild() != null){
-                float distrightChild = (float) Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
+                double distrightChild = Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
                 if(distrightChild < currentdist){
                     currentresult = NN(node.getRightChild(), longitude, latitude, depth + 1, distrightChild, node);
                 }
             }
             if (node.getLeftChild() != null){
-                float distleftChild = (float) Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude, 2) + Math.pow(node.getLeftChild().getLongitude() - longitude, 2));
+                double distleftChild = Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude, 2) + Math.pow(node.getLeftChild().getLongitude() - longitude, 2));
                 if (distleftChild < currentdist){
                     currentresult = NN(node.getLeftChild(), longitude, latitude, depth, distleftChild, node);
                 }

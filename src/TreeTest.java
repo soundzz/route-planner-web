@@ -8,10 +8,10 @@ import static org.junit.Assert.*;
 public class TreeTest {
     @Test
     public void testNearestNeighbor(){
-        float min_x = Float.MAX_VALUE;
-        float min_y = Float.MAX_VALUE;
-        float max_x = 0;
-        float max_y = 0;
+        double min_x = Double.MAX_VALUE;
+        double min_y = Double.MAX_VALUE;
+        double max_x = 0;
+        double max_y = 0;
         long time = System.currentTimeMillis();
         long elapsed;
         Graph graph = new Graph("MV.fmi");
@@ -39,14 +39,14 @@ public class TreeTest {
         }
         //create array with test points
         int numberOfSamples = 10;
-        float TestArray[][] = new float[2][numberOfSamples];
+        double TestArray[][] = new double[2][numberOfSamples];
         for(int i = 0; i < numberOfSamples; i++){
-            TestArray[0][i] = (float)( min_x + Math.random() * (max_x - min_x));
-            TestArray[1][i] = (float)(min_y + Math.random() * (max_y - min_y));
+            TestArray[0][i] = min_x + Math.random() * (max_x - min_x);
+            TestArray[1][i] = min_y + Math.random() * (max_y - min_y);
         }
         //Get results with simple iteration:
-        float simpleSolution[][] = new float[2][numberOfSamples];
-        float[][] nodeArray = graph.getNodes();
+        double simpleSolution[][] = new double[2][numberOfSamples];
+        double[][] nodeArray = graph.getNodes();
         time = System.currentTimeMillis();
         for(int i = 0; i < numberOfSamples; i++){
             int sol = graph.nearestNeighbor(TestArray[0][i], TestArray[1][i]);
@@ -59,7 +59,7 @@ public class TreeTest {
 
 
         //Get results with kd-tree:
-        float treeSolution[][] = new float[2][numberOfSamples];
+        double treeSolution[][] = new double[2][numberOfSamples];
         time = System.currentTimeMillis();
         for(int i = 0; i < numberOfSamples; i++){
             Node sol_node = KDTree.nearestNeighbor(TestArray[0][i], TestArray[1][i]);
