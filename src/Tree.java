@@ -81,9 +81,9 @@ public class Tree {
 
         if (axis == 1 && node != null){
             currentdist = (float) Math.sqrt( Math.pow( node.getLongitude() - longitude,2) + Math.pow(node.getLatitude() - latitude ,2));
-            System.out.println("Test root node x " + node.getNodeID() +" " +node.getLongitude() );
+            //System.out.println("Test root node x " + node.getNodeID() +" " +node.getLongitude() );
             if (node.getLongitude() > longitude && node.getLeftChild() != null){
-                System.out.println("Test left child, x Achse: " + node.getNodeID() +" " + longitude);
+                //System.out.println("Test left child, x Achse: " + node.getNodeID() +" " + longitude);
                 float distleftChild = (float) Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude,2) + Math.pow(node.getLeftChild().getLongitude() -longitude,2));
                     currentresult = NN(node.getLeftChild(), longitude, latitude, depth + 1, currentdist, node);
                     currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
@@ -93,7 +93,7 @@ public class Tree {
 
                 if (currentdist > Math.sqrt(Math.pow(currentresult.getLatitude()-latitude,2)) && node.getRightChild() != null){
                     // geht in hs und speichtert test
-                    System.out.println("Test left child, x Achse hs und right: " + node.getNodeID());
+                    //System.out.println("Test left child, x Achse hs und right: " + node.getNodeID());
                     test =  NN(node.getRightChild(), longitude, latitude, depth, currentdist, node);
                     testdist = (float) Math.sqrt( Math.pow( test.getLongitude() - longitude,2) + Math.pow(test.getLatitude() - latitude ,2));
                     if (currentdist > testdist){
@@ -106,7 +106,7 @@ public class Tree {
             } else {
                 if (node.getRightChild()!= null && node.getLongitude() < longitude) {
                     float distrightChild = (float) Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
-                        System.out.println("Test right child, x Achse: " + node.getNodeID());
+                        //System.out.println("Test right child, x Achse: " + node.getNodeID());
                         currentresult = NN(node.getRightChild(), longitude, latitude, depth + 1, currentdist, node);
                         currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
 
@@ -127,10 +127,10 @@ public class Tree {
 
         } else if ( axis == 0 && node != null) {
             currentdist = (float) Math.sqrt( Math.pow( node.getLongitude() - longitude,2) + Math.pow(node.getLatitude() - latitude ,2));
-            System.out.println("Test root node y " + node.getNodeID() +" "+latitude);
+            //System.out.println("Test root node y " + node.getNodeID() +" "+latitude);
             if ( node.getLatitude() > latitude && node.getLeftChild() != null) {
                 float distleftChild = (float) Math.sqrt(Math.pow(node.getLeftChild().getLatitude() - latitude, 2) + Math.pow(node.getLeftChild().getLongitude() - longitude, 2));
-                System.out.println("Test left child, y Achse: +" + node.getNodeID());
+                //System.out.println("Test left child, y Achse: +" + node.getNodeID());
                 currentresult = NN(node.getLeftChild(), longitude, latitude, depth + 1, currentdist, node);
                 currentdist = (float) Math.sqrt(Math.pow(currentresult.getLongitude() - longitude, 2) + Math.pow(currentresult.getLatitude() - latitude, 2));
             }
@@ -149,7 +149,7 @@ public class Tree {
             } else {
                 if (node.getRightChild() != null && node.getLatitude() < latitude) {
                     float distrightChild = (float) Math.sqrt(Math.pow(node.getRightChild().getLatitude() - latitude,2) + Math.pow(node.getRightChild().getLongitude() -longitude,2));
-                        System.out.println("Test right child, y Achse: " + node.getNodeID());
+                        //System.out.println("Test right child, y Achse: " + node.getNodeID());
                         currentresult = NN(node.getRightChild(), longitude, latitude, depth + 1, currentdist, node);
                         currentdist = (float) Math.sqrt( Math.pow( currentresult.getLongitude() - longitude,2) + Math.pow(currentresult.getLatitude() - latitude ,2));
                 }
@@ -166,10 +166,10 @@ public class Tree {
 
             }
         if ( currentresult != null && result != null ) {
-            System.out.println("Test current best1 : " + currentresult.getNodeID());
+            //System.out.println("Test current best1 : " + currentresult.getNodeID());
 
         }else if( result != null){
-            System.out.println("Test result begin1: " + result.getNodeID());
+            //System.out.println("Test result begin1: " + result.getNodeID());
         }
 
 
@@ -196,10 +196,10 @@ public class Tree {
             }
         }
         if ( currentresult != null && result != null ) {
-            System.out.println("Test current best2 : " + currentresult.getNodeID());
+            //System.out.println("Test current best2 : " + currentresult.getNodeID());
 
         }else if( result != null){
-            System.out.println("Test result begin2: " + result.getNodeID());
+            //System.out.println("Test result begin2: " + result.getNodeID());
         }
 
 
