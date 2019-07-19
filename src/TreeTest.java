@@ -63,8 +63,8 @@ public class TreeTest {
         time = System.currentTimeMillis();
         for(int i = 0; i < numberOfSamples; i++){
             Node sol_node = KDTree.nearestNeighbor(TestArray[0][i], TestArray[1][i]);
-            treeSolution[1][i] = sol_node.getLatitude();
-            treeSolution[0][i] = sol_node.getLongitude();
+            treeSolution[0][i] = sol_node.getLatitude();
+            treeSolution[1][i] = sol_node.getLongitude();
         }
 
         elapsed = System.currentTimeMillis() - time;
