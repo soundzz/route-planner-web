@@ -85,12 +85,12 @@ public class Hub {
                 System.out.println("NodeID: " + node.getNodeID() + ", leftChild: " + node.getLeftChild().getNodeID() + ", rightChild: " + node.getRightChild().getNodeID());
             }
         }
-        float x_coord = (float) Math.random() * 10;
-        float y_coord = (float) Math.random() * 10;
+        Double x_coord =  Math.random() * 10;
+        Double y_coord =  Math.random() * 10;
 
         System.out.println("Nearest neighbor of " + x_coord + ", " + y_coord);
         Node neighbor = KDTree.nearestNeighbor(x_coord, y_coord);
-        System.out.println("Solution NN: " + neighbor.getLongitude() + " | " + neighbor.getLatitude());
+        System.out.println("Solution NN: " + neighbor.getLatitude() + " | " + neighbor.getLongitude());
 
         int benchmark = graph.nearestNeighbor(x_coord, y_coord);
         System.out.println("Solution: " + graph.getNodes()[0][benchmark] + " | " + graph.getNodes()[1][benchmark]);
