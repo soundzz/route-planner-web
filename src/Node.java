@@ -12,10 +12,10 @@ public class Node {
     }
 
     public double getLatitude(){
-        return longitude ;
+        return latitude ;
     }
     public double getLongitude(){
-        return  latitude;
+        return  longitude;
     }
     public void setLeftChild(Node child){
         leftChild = child;
@@ -31,8 +31,8 @@ public class Node {
     public Node getRightChild(){
         return rightChild;
     }
-    public float getDist(Node node){
-        return (float)Math.sqrt(Math.pow(this.latitude - node.latitude, 2) + Math.pow(this.longitude - node.longitude, 2));
+    public Double getDist(Node node){
+        return Math.sqrt(Math.pow(this.latitude - node.latitude, 2) + Math.pow(this.longitude - node.longitude, 2));
     }
     public int getNodeID(){
         return nodeID;
