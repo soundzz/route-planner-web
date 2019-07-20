@@ -14,7 +14,7 @@ public class TreeTest {
         double max_y = 0;
         long time = System.currentTimeMillis();
         long elapsed;
-        Graph graph = new Graph("MV.fmi");
+        Graph graph = new Graph("germany.fmi");
         System.out.println("Created Graph in " + (System.currentTimeMillis() - time) + "ms");
         time = System.currentTimeMillis();
         Tree KDTree = new Tree(graph.getNodes());
