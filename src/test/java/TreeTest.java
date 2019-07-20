@@ -72,5 +72,4 @@ public class TreeTest {
         System.out.println("Average Time per point: " + (elapsed / numberOfSamples) + "ms");
         assertArrayEquals(treeSolution, simpleSolution);
     }
-
 }

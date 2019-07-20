@@ -1,9 +1,9 @@
-out/
+target/
 .idea/
 mapdata/
 11.iml
 Benchs/
 output.sol
-.class
+*.class
 #map data -> file size too large
 *.fmi
