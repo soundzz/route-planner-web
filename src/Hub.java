@@ -90,7 +90,7 @@ public class Hub {
 
         System.out.println("Nearest neighbor of " + x_coord + ", " + y_coord);
         Node neighbor = KDTree.nearestNeighbor(x_coord, y_coord);
-        System.out.println("Solution NN: " + neighbor.getLatitude() + " | " + neighbor.getLongitude());
+        System.out.println("Solution nearestNeighbor: " + neighbor.getLatitude() + " | " + neighbor.getLongitude());
 
         int benchmark = graph.nearestNeighbor(x_coord, y_coord);
         System.out.println("Solution: " + graph.getNodes()[0][benchmark] + " | " + graph.getNodes()[1][benchmark]);

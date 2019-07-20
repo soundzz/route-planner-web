@@ -54,12 +54,12 @@ public class Tree {
     }
 
     public Node nearestNeighbor(double latitude, double longitude) {
-        return NN(root, latitude, longitude, 0, Double.MAX_VALUE);
+        return nearestNeighbor(root, latitude, longitude, 0, Double.MAX_VALUE);
     }
 
 
 
-    public Node NN ( Node node, double  latitude, double longitude, int depth , double currentbestdist){
+    public Node nearestNeighbor(Node node, double  latitude, double longitude, int depth , double currentbestdist){
 
         /**
          *
@@ -91,35 +91,35 @@ public class Tree {
         if(axis == 0){ //lat
             if(node.getLatitude() < latitude){
                 if(node.getRightChild() !=null){
-                    testright = NN(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
+                    testright = nearestNeighbor(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
                 }
-                if (node.getLeftChild() != null){
-                    testleft = NN(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
+                if (node.getLeftChild() != null && currentbestdist > Math.abs(node.getLatitude() - latitude)){
+                    testleft = nearestNeighbor(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
                 }
 
             } else { // node.getLatitude > latitude
                 if (node.getLeftChild() != null){
-                    testleft = NN(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
+                    testleft = nearestNeighbor(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
                 }
-                if(node.getRightChild() !=null){
-                    testright = NN(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
+                if(node.getRightChild() !=null && currentbestdist > Math.abs(node.getLatitude() - latitude)){
+                    testright = nearestNeighbor(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
                 }
             }
         } else { // case axis == 1 // long
             if(node.getLongitude() < longitude){
                 if(node.getRightChild() !=null){
-                    testright = NN(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
+                    testright = nearestNeighbor(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
                 }
-                if (node.getLeftChild() != null){
-                    testleft = NN(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
+                if (node.getLeftChild() != null && currentbestdist > Math.abs(node.getLongitude() - longitude)){
+                    testleft = nearestNeighbor(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
                 }
 
             } else { //node.getLongitude > longitude
                 if (node.getLeftChild() != null){
-                    testleft = NN(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
+                    testleft = nearestNeighbor(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
                 }
-                if(node.getRightChild() !=null){
-                    testright = NN(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
+                if(node.getRightChild() !=null && currentbestdist > Math.abs(node.getLongitude() - longitude)){
+                    testright = nearestNeighbor(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
                 }
             }
         }

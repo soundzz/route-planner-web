@@ -1,4 +1,4 @@
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,7 +38,7 @@ public class TreeTest {
             }
         }
         //create array with test points
-        int numberOfSamples = 10;
+        int numberOfSamples = 100;
         double TestArray[][] = new double[2][numberOfSamples];
         for(int i = 0; i < numberOfSamples; i++){
             TestArray[0][i] = min_x + Math.random() * (max_x - min_x);
@@ -68,7 +68,7 @@ public class TreeTest {
         }
 
         elapsed = System.currentTimeMillis() - time;
-        System.out.println("Finished k-d-Tree NN search in " + elapsed + "ms");
+        System.out.println("Finished k-d-Tree nearestNeighbor search in " + elapsed + "ms");
         System.out.println("Average Time per point: " + (elapsed / numberOfSamples) + "ms");
         assertArrayEquals(treeSolution, simpleSolution);
     }
