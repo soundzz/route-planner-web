@@ -10,11 +10,11 @@ public class Tree {
             nodeList.add(new Node(i, nodes[0][i], nodes[1][i]));
         }
 
-        root = constructTree(nodeList, 0);
+        root = constructTree(nodeList, true);
     }
 
-    private Node constructTree(ArrayList<Node> children, int depth) {
-        int axis = depth % 2; //0 = y-achse (latitude), 1 = x-Achse (longitude)
+    private Node constructTree(ArrayList<Node> children, boolean depth) {
+
         int splitIndex;
         if (children == null || children.size() == 0) {
             return null;
@@ -31,13 +31,13 @@ public class Tree {
 
         for (int i = 0; i < children.size(); i++) {
             Node currentNode = children.get(i);
-            if (axis == 0) {
+            if (depth) { //lat
                 if (splitNode.getLatitude() > currentNode.getLatitude()) {
                     leftChildren.add(currentNode);
                 } else if (splitNode.getLatitude() <= currentNode.getLatitude() && currentNode != splitNode) {
                     rightChildren.add(currentNode);
                 }
-            } else if (axis == 1) {
+            } else { // (!depth)
 
                 if (splitNode.getLongitude() > currentNode.getLongitude()) {
                     leftChildren.add(currentNode);
@@ -48,18 +48,17 @@ public class Tree {
             }
         }
 
-        splitNode.setLeftChild(constructTree(leftChildren, depth + 1));
-        splitNode.setRightChild(constructTree(rightChildren, depth + 1));
+        splitNode.setLeftChild(constructTree(leftChildren, !depth));
+        splitNode.setRightChild(constructTree(rightChildren, !depth));
         return splitNode;
     }
 
     public Node nearestNeighbor(double latitude, double longitude) {
-        return nearestNeighbor(root, latitude, longitude, 0, Double.MAX_VALUE);
+        return nearestNeighbor(root, latitude, longitude, true, Double.MAX_VALUE, null);
     }
 
 
-
-    public Node nearestNeighbor(Node node, double  latitude, double longitude, int depth , double currentbestdist){
+    public Node nearestNeighbor(Node node, double latitude, double longitude, boolean depth, double currentbestdist, Node currentbestnode) {
 
         /**
          *
@@ -69,92 +68,106 @@ public class Tree {
 
         //initializing variables
 
-        Node currentbestnode =null;
-        Node testright= null;
+        //Node currentbestnode = null;
+        Node testright = null;
         Node testleft = null;
         double distright = Double.MAX_VALUE;
         double distleft = Double.MAX_VALUE;
-        double distance= Double.MAX_VALUE;
-        int axis = depth % 2;
-
-        if (node != null){
-            distance = Math.sqrt( Math.pow(node.getLatitude()-latitude,2)  + Math.pow(node.getLongitude()-longitude,2) );
+        double distance = Double.MAX_VALUE;
+        if(node == null){
+            return currentbestnode;
+        }
+        if (node != null) {
+            distance = Math.pow(node.getLatitude() - latitude, 2) + Math.pow(node.getLongitude() - longitude, 2);
         }
 
         //check if the current node is best
 
-        if (distance < currentbestdist){
+        if (distance < currentbestdist) {
             currentbestnode = node;
             currentbestdist = distance;
         }
 
-        if(axis == 0){ //lat
-            if(node.getLatitude() < latitude){
-                if(node.getRightChild() !=null){
-                    testright = nearestNeighbor(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
+        if (depth) { //lat
+            if (node.getLatitude() < latitude) {
+                if (node.getRightChild() != null) {
+                    currentbestnode = nearestNeighbor(node.getRightChild(), latitude, longitude, false, currentbestdist, currentbestnode);
+                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+
                 }
-                if (node.getLeftChild() != null && currentbestdist > Math.abs(node.getLatitude() - latitude)){
-                    testleft = nearestNeighbor(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
+                if (node.getLeftChild() != null && currentbestdist > Math.pow(node.getLatitude() - latitude, 2)) {
+                    currentbestnode = nearestNeighbor(node.getLeftChild(), latitude, longitude, false, currentbestdist, currentbestnode);
+                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+
                 }
 
+
             } else { // node.getLatitude > latitude
-                if (node.getLeftChild() != null){
-                    testleft = nearestNeighbor(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
+                if (node.getLeftChild() != null) {
+                    currentbestnode = nearestNeighbor(node.getLeftChild(), latitude, longitude, false, currentbestdist, currentbestnode);
+                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+
                 }
-                if(node.getRightChild() !=null && currentbestdist > Math.abs(node.getLatitude() - latitude)){
-                    testright = nearestNeighbor(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
+                if (node.getRightChild() != null && currentbestdist > Math.pow(node.getLatitude() - latitude, 2)) {
+                    currentbestnode = nearestNeighbor(node.getRightChild(), latitude, longitude, false, currentbestdist, currentbestnode);
+                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+
                 }
             }
         } else { // case axis == 1 // long
-            if(node.getLongitude() < longitude){
-                if(node.getRightChild() !=null){
-                    testright = nearestNeighbor(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
+            if (node.getLongitude() < longitude) {
+                if (node.getRightChild() != null) {
+                    currentbestnode = nearestNeighbor(node.getRightChild(), latitude, longitude, true, currentbestdist, currentbestnode);
+                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+
                 }
-                if (node.getLeftChild() != null && currentbestdist > Math.abs(node.getLongitude() - longitude)){
-                    testleft = nearestNeighbor(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
+                if (node.getLeftChild() != null && currentbestdist > Math.pow(node.getLongitude() - longitude, 2)) {
+                    currentbestnode = nearestNeighbor(node.getLeftChild(), latitude, longitude, true, currentbestdist, currentbestnode);
+                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+
                 }
 
             } else { //node.getLongitude > longitude
-                if (node.getLeftChild() != null){
-                    testleft = nearestNeighbor(node.getLeftChild(), latitude, longitude, depth +1, currentbestdist);
+                if (node.getLeftChild() != null) {
+                    currentbestnode = nearestNeighbor(node.getLeftChild(), latitude, longitude, true, currentbestdist, currentbestnode);
+                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+
                 }
-                if(node.getRightChild() !=null && currentbestdist > Math.abs(node.getLongitude() - longitude)){
-                    testright = nearestNeighbor(node.getRightChild(), latitude, longitude, depth +1, currentbestdist);
+                if (node.getRightChild() != null && currentbestdist > Math.pow(node.getLongitude() - longitude, 2)) {
+                    currentbestnode = nearestNeighbor(node.getRightChild(), latitude, longitude, true, currentbestdist, currentbestnode);
+                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+
                 }
             }
         }
 
         //set the distance
-
-        if (testleft != null){
-            distleft = Math.sqrt( Math.pow(testleft.getLatitude()-latitude,2)  + Math.pow(testleft.getLongitude()-longitude,2) );
+/*
+        if (testleft != null) {
+            distleft = Math.pow(testleft.getLatitude() - latitude, 2) + Math.pow(testleft.getLongitude() - longitude, 2);
         }
-        if(testright != null){
-            distright = Math.sqrt( Math.pow(testright.getLatitude()-latitude,2)  + Math.pow(testright.getLongitude()-longitude,2) );
+        if (testright != null) {
+            distright = Math.pow(testright.getLatitude() - latitude, 2) + Math.pow(testright.getLongitude() - longitude, 2);
         }
 
         // check if the left/right distance is better
 
-        if (distleft < currentbestdist){
+        if (distleft < currentbestdist) {
             currentbestdist = distleft;
             currentbestnode = testleft;
         }
-        if (distright < currentbestdist){
+        if (distright < currentbestdist) {
             currentbestdist = distright;
             currentbestnode = testright;
         }
-
+*/
         return currentbestnode;
     }
-
-
 
 
     public ArrayList<Node> getNodeList() {
         return nodeList;
     }
-
-
 
 
 }

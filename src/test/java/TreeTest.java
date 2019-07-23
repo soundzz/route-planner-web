@@ -14,7 +14,7 @@ public class TreeTest {
         double max_y = 0;
         long time = System.currentTimeMillis();
         long elapsed;
-        Graph graph = new Graph("germany.fmi");
+        Graph graph = new Graph("stgtregbz.fmi");
         System.out.println("Created Graph in " + (System.currentTimeMillis() - time) + "ms");
         time = System.currentTimeMillis();
         Tree KDTree = new Tree(graph.getNodes());
@@ -55,7 +55,7 @@ public class TreeTest {
         }
         elapsed = System.currentTimeMillis() - time;
         System.out.println("Finished simple iteration in " + elapsed + "ms");
-        System.out.println("Average Time per point: " + (elapsed / numberOfSamples) + "ms");
+        System.out.println("Average Time per point: " + ((double)elapsed / numberOfSamples) + "ms");
 
 
         //Get results with kd-tree:
@@ -69,7 +69,7 @@ public class TreeTest {
 
         elapsed = System.currentTimeMillis() - time;
         System.out.println("Finished k-d-Tree nearestNeighbor search in " + elapsed + "ms");
-        System.out.println("Average Time per point: " + (elapsed / numberOfSamples) + "ms");
+        System.out.println("Average Time per point: " + ((double)elapsed / numberOfSamples) + "ms");
         assertArrayEquals(treeSolution, simpleSolution);
     }
 }
