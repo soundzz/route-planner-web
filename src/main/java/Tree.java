@@ -53,6 +53,9 @@ public class Tree {
         return splitNode;
     }
 
+    public double calcDist(Node n, double latitude, double longitude){
+        return Math.pow(n.getLatitude() - latitude, 2) + Math.pow(n.getLongitude() - longitude, 2);
+    }
     public Node nearestNeighbor(double latitude, double longitude) {
         return nearestNeighbor(root, latitude, longitude, true, Double.MAX_VALUE, null);
     }
@@ -67,12 +70,6 @@ public class Tree {
          */
 
         //initializing variables
-
-        //Node currentbestnode = null;
-        Node testright = null;
-        Node testleft = null;
-        double distright = Double.MAX_VALUE;
-        double distleft = Double.MAX_VALUE;
         double distance = Double.MAX_VALUE;
         if(node == null){
             return currentbestnode;
@@ -92,12 +89,11 @@ public class Tree {
             if (node.getLatitude() < latitude) {
                 if (node.getRightChild() != null) {
                     currentbestnode = nearestNeighbor(node.getRightChild(), latitude, longitude, false, currentbestdist, currentbestnode);
-                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+                    currentbestdist = calcDist(currentbestnode, latitude, longitude);
 
                 }
                 if (node.getLeftChild() != null && currentbestdist > Math.pow(node.getLatitude() - latitude, 2)) {
                     currentbestnode = nearestNeighbor(node.getLeftChild(), latitude, longitude, false, currentbestdist, currentbestnode);
-                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
 
                 }
 
@@ -105,12 +101,11 @@ public class Tree {
             } else { // node.getLatitude > latitude
                 if (node.getLeftChild() != null) {
                     currentbestnode = nearestNeighbor(node.getLeftChild(), latitude, longitude, false, currentbestdist, currentbestnode);
-                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+                    currentbestdist = calcDist(currentbestnode, latitude, longitude);
 
                 }
                 if (node.getRightChild() != null && currentbestdist > Math.pow(node.getLatitude() - latitude, 2)) {
                     currentbestnode = nearestNeighbor(node.getRightChild(), latitude, longitude, false, currentbestdist, currentbestnode);
-                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
 
                 }
             }
@@ -118,49 +113,27 @@ public class Tree {
             if (node.getLongitude() < longitude) {
                 if (node.getRightChild() != null) {
                     currentbestnode = nearestNeighbor(node.getRightChild(), latitude, longitude, true, currentbestdist, currentbestnode);
-                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+                    currentbestdist = calcDist(currentbestnode, latitude, longitude);
 
                 }
                 if (node.getLeftChild() != null && currentbestdist > Math.pow(node.getLongitude() - longitude, 2)) {
                     currentbestnode = nearestNeighbor(node.getLeftChild(), latitude, longitude, true, currentbestdist, currentbestnode);
-                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
 
                 }
 
             } else { //node.getLongitude > longitude
                 if (node.getLeftChild() != null) {
                     currentbestnode = nearestNeighbor(node.getLeftChild(), latitude, longitude, true, currentbestdist, currentbestnode);
-                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
+                    currentbestdist = calcDist(currentbestnode, latitude, longitude);
 
                 }
                 if (node.getRightChild() != null && currentbestdist > Math.pow(node.getLongitude() - longitude, 2)) {
                     currentbestnode = nearestNeighbor(node.getRightChild(), latitude, longitude, true, currentbestdist, currentbestnode);
-                    currentbestdist = Math.pow(currentbestnode.getLatitude() - latitude, 2) + Math.pow(currentbestnode.getLongitude() - longitude, 2);
 
                 }
             }
         }
 
-        //set the distance
-/*
-        if (testleft != null) {
-            distleft = Math.pow(testleft.getLatitude() - latitude, 2) + Math.pow(testleft.getLongitude() - longitude, 2);
-        }
-        if (testright != null) {
-            distright = Math.pow(testright.getLatitude() - latitude, 2) + Math.pow(testright.getLongitude() - longitude, 2);
-        }
-
-        // check if the left/right distance is better
-
-        if (distleft < currentbestdist) {
-            currentbestdist = distleft;
-            currentbestnode = testleft;
-        }
-        if (distright < currentbestdist) {
-            currentbestdist = distright;
-            currentbestnode = testright;
-        }
-*/
         return currentbestnode;
     }
 
