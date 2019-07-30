@@ -3,6 +3,7 @@ target/
 mapdata/
 11.iml
 Benchs/
+bin/
 output.sol
 *.class
 #map data -> file size too large
