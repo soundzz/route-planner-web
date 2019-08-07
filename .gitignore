@@ -1,8 +1,12 @@
 target/
+out
 .idea/
 mapdata/
 11.iml
 Benchs/
+.classpath
+.project
+.settings/
 bin/
 output.sol
 *.class

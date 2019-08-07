@@ -1,3 +1,4 @@
+package roupla.utility;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.*;
@@ -33,14 +34,13 @@ public class Graph {
     }
 
     /**
-     * reads the Graph file in the folder mapdata
+     * reads the com.roupla.bw.roupla.utility.Graph file in the folder mapdata
      * saves the nodes, edges in the array nodes, edges
      * throws file not found exception e, if the file is not found
      *
      * @param fileName ...
      */
     public void readGraphData(String fileName) {
-
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader("mapdata/" + fileName));
@@ -208,7 +208,7 @@ public class Graph {
             }
         }
         /*for(int i =0; i < numberOfNodes; i++){
-            System.out.println("Node: "+ i+ "  Costs: "+ costs[i]);
+            System.out.println("com.roupla.bw.roupla.utility.Node: "+ i+ "  Costs: "+ costs[i]);
         }*/
         if (targetNode == -1) {
             calculatedPaths = true;
@@ -304,7 +304,7 @@ public class Graph {
             }
         }
         /*for(int i =0; i < numberOfNodes; i++){
-            System.out.println("Node: "+ i+ "  Costs: "+ costs[i]);
+            System.out.println("com.roupla.bw.roupla.utility.Node: "+ i+ "  Costs: "+ costs[i]);
         }*/
         calculatedPaths = true;
         currentStartNode = startNode;
