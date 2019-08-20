@@ -5,18 +5,19 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
 
-public class Hub {
+public class Hub{
     private List<Integer> query = new ArrayList<>(); //in pairs of start/target nodes at even/odd indices
     private int[] results;
     Graph graph;
     Tree KDTree;
-    public Hub(String filename){
-        graph = new Graph(filename);
+    public Hub(String path){
+        graph = new Graph(path);
         KDTree = new Tree(graph.getNodes());
     }
     public static String test(){
         return "hello world";
     }
+
     /**
      * query reads the query file and calculates the minimal costs
      *

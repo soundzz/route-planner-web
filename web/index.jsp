@@ -1,6 +1,8 @@
 <%@ page import="roupla.utility.*"%>
 <%@ page import ="java.util.*"%>
 <%@ page import =" java.io.*"%>
+<%@ page import ="javax.servlet.*"%>
+<%@ page import ="javax.servlet.http.*"%>
 <%--
   Created by IntelliJ IDEA.
   User: Felix
@@ -31,13 +33,12 @@
 </body>
 
 <script>
-<%
-  Hub hub = new Hub("MV.fmi");
-%>
-  document.getElementById("importing").innerHTML = "Import successful!"
+
+  document.getElementById("importing").innerHTML = "Import successful!";
+  var coords;
   var nextLoc = 0;
-  var startLoc = {latitude, longitude};
-  var endLoc = {latitude, longitude};
+  var startLoc = {Double: latitude, Double: longitude};
+  var endLoc = {Double: latitude, Double: longitude};
   var mymap = L.map("germanymap");
   var osmURL='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   var osmAttrib='Map data &copy <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
@@ -46,7 +47,11 @@
   osm.addTo(mymap)
   var startMarker = L.marker([0,0], {opacity: 0}).addTo(mymap);
   var endMarker = L.marker([0,0], {opacity: 0}).addTo(mymap);
-
+  <%
+    ServletContext context = request.getServletContext();
+    String path =   context.getRealPath("mapdata/bw.fmi");
+    Hub hub = new Hub(path);
+  %>
 
   function onMapClick(e){
 
@@ -66,6 +71,8 @@
       endMarker.setLatLng(e.latlng);
       endMarker.setOpacity(1);
       //TODO: route request
+
+
     }
     console.log(startLoc, endLoc);
   }

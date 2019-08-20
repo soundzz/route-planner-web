@@ -29,8 +29,8 @@ public class Graph {
 
     }
 
-    public Graph(String fileName) {
-        this.readGraphData(fileName);
+    public Graph(String path) {
+        this.readGraphData(path);
     }
 
     /**
@@ -38,12 +38,12 @@ public class Graph {
      * saves the nodes, edges in the array nodes, edges
      * throws file not found exception e, if the file is not found
      *
-     * @param fileName ...
+     * @param path ...
      */
-    public void readGraphData(String fileName) {
+    public void readGraphData(String path) {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader("mapdata/" + fileName));
+            reader = new BufferedReader(new FileReader(path));
 
 
             boolean dataStart = false;
@@ -148,7 +148,6 @@ public class Graph {
 
     /**
      * updateCosts updates the costs for the paths
-     *
      * @param node_A
      * @param node_B
      * @param currentOffset
