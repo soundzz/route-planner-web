@@ -1,8 +1,3 @@
-<%@ page import="roupla.utility.*"%>
-<%@ page import ="java.util.*"%>
-<%@ page import =" java.io.*"%>
-<%@ page import ="javax.servlet.*"%>
-<%@ page import ="javax.servlet.http.*"%>
 <%--
   Created by IntelliJ IDEA.
   User: Felix
@@ -47,11 +42,7 @@
   osm.addTo(mymap)
   var startMarker = L.marker([0,0], {opacity: 0}).addTo(mymap);
   var endMarker = L.marker([0,0], {opacity: 0}).addTo(mymap);
-  <%
-    ServletContext context = request.getServletContext();
-    String path =   context.getRealPath("mapdata/bw.fmi");
-    Hub hub = new Hub(path);
-  %>
+
 
   function onMapClick(e){
 
