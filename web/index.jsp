@@ -15,7 +15,7 @@
   <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
           integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
           crossorigin=""></script>
-
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <style>
     #germanymap {height:90vh;}
   </style>
@@ -62,8 +62,7 @@
       endMarker.setLatLng(e.latlng);
       endMarker.setOpacity(1);
       //TODO: route request
-
-
+      $.post("MapServlet", String(startLoc) + String(endLoc));  //<- "success" übergebener string wird in double-paare umgewandelt und in coords gespeichert
     }
     console.log(startLoc, endLoc);
   }
@@ -71,15 +70,11 @@
 
 
 
-  /*var coords = [
-      [48.748, 9.064],
-      [48.875, 9.042],
-      [48.759, 9.000],
-      [48.950, 9.100]
-  ]
-  var polyline = L.polyline(coords, {color: 'blue'}).addTo(mymap);
-  mymap.fitBounds(polyline.getBounds());
-  */
+
+    //vv auch in success methode
+  //var polyline = L.polyline(coords, {color: 'blue'}).addTo(mymap);
+  //mymap.fitBounds(polyline.getBounds());
+    //^^
 </script>
 
 </html>
