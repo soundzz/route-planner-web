@@ -62,7 +62,12 @@
       endMarker.setLatLng(e.latlng);
       endMarker.setOpacity(1);
       //TODO: route request
-      $.post("MapServlet", String(startLoc) + String(endLoc));  //<- "success" übergebener string wird in double-paare umgewandelt und in coords gespeichert
+      $.postJSON("MapServlet", String(startLoc) + String(endLoc),function(response) {
+          //Hier kommt der String rein fuer die Polyline
+         coords = response.split(" ");
+         // polyline
+         var polyline = L.polyline(coords, {color: 'blue'}).addTo(mymap);
+      });  //<- "success" übergebener string wird in double-paare umgewandelt und in coords gespeichert
     }
     console.log(startLoc, endLoc);
   }
