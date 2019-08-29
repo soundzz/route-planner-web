@@ -63,9 +63,9 @@
          data: String,
          dataTyp: "Text",
          contentType: String,
-         success: function(msg){
+         success: function(response){
          //Hier kommt der String rein fuer die Polyline
-         coords = msg.split(" ");
+         coords = response.split(" ");
          // polyline
          var polyline = L.polyline(coords, {color: 'blue'}).addTo(mymap);
       }
