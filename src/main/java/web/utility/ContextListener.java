@@ -52,9 +52,27 @@ public class ContextListener extends HttpServlet implements ServletContextListen
                     Double.parseDouble(coordinates[1]), Double.parseDouble(coordinates[3]), Double.parseDouble(coordinates[5]), Double.parseDouble(coordinates[7]));
             System.out.println("done" + path.toString() + " done");
             //Knotenindizes -> koordinatenpaare (lat/long) in string
-            Stringbuilder builder = new ...
+            List<Double> LatLong = new List(2* path.length);
+            for (int i =0; i <= LatLong.length(); i +2){
+                LatLong[i] = graph.getNodes().getLatitude().[path[i]];  //??????????????
+                LatLong[i+1] = graph.getNodes().getLatitude().[path[i+1]];
+            }
+            System.out.println("done" + LatLong.toString() + " done");
+            //object of stringbuilder class
+            Stringbuilder builder = new Stringbuilder();
+            
+            for(Double d: str){
+                builder.append(d);
+                builder.append(" ");
+            }
+            
+            String string = builder.toString();
+            
+            //test
+            System.out.println(string);
 
             //string in response data
+            
             //response success
         } catch (IOException e) {
 
