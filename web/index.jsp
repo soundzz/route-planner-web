@@ -28,6 +28,7 @@
 </body>
 
 <script>
+
   document.getElementById("importing").innerHTML = "Import successful!";
   var coords;
   var nextLoc = 0;
@@ -41,9 +42,13 @@
   osm.addTo(mymap)
   var startMarker = L.marker([0,0], {opacity: 0}).addTo(mymap);
   var endMarker = L.marker([0,0], {opacity: 0}).addTo(mymap);
+
+
   function onMapClick(e){
+
     document.getElementById("latitude").textContent=e.latlng.lat;
     document.getElementById("longitude").textContent=e.latlng.lng;
+
     if(nextLoc == 0){
       endLoc = {};
       startLoc = e.latlng;
@@ -57,29 +62,21 @@
       endMarker.setLatLng(e.latlng);
       endMarker.setOpacity(1);
       //TODO: route request
-      $.post("MapServlet", String(startLoc) + String(endLoc));  //<- "success" übergebener string wird in double-paare umgewandelt und in coords gespeichert
-      $.ajax({
-         type: "POST",
-         data: String,
-         dataTyp: "Text",
-         contentType: String,
-         success: function(response){
-         //Hier kommt der String rein fuer die Polyline
-         coords = response.split(" ");
+    $.get("MapServlet",String(startLoc)+ String(endLoc), function(responseJson) {                 
+        // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON
+         coords = responseJson.split(" ");
          // polyline
          var polyline = L.polyline(coords, {color: 'blue'}).addTo(mymap);
-      }
-      });
+    });
+    
     }
     console.log(startLoc, endLoc);
   }
   mymap.on('click', onMapClick);
-    /*var coords = [
-        [48.748, 9.064],
-        [48.875, 9.042],
-        [48.759, 9.000],
-        [48.950, 9.100]
-    ]/*
+
+
+
+
     //vv auch in success methode
   //var polyline = L.polyline(coords, {color: 'blue'}).addTo(mymap);
   //mymap.fitBounds(polyline.getBounds());
@@ -87,5 +84,3 @@
 </script>
 
 </html>
-
-   
