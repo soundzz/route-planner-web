@@ -62,7 +62,7 @@
       endMarker.setLatLng(e.latlng);
       endMarker.setOpacity(1);
       //TODO: route request
-    $.get("MapServlet",String(startLoc)+ String(endLoc), function(responseJson) {                 
+    $.post("MapServlet",String(startLoc)+ String(endLoc), function(responseJson) {                 
         // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON
          coords = responseJson.split(" ");
          // polyline
