@@ -38,12 +38,7 @@ public class ContextListener extends HttpServlet implements ServletContextListen
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        try {
+              try {
             String input = request.getReader().readLine();
             System.out.println(input);
             String[] coordinates = input.split("[(, )]");
@@ -53,29 +48,37 @@ public class ContextListener extends HttpServlet implements ServletContextListen
             System.out.println("done" + path.toString() + " done");
             //Knotenindizes -> koordinatenpaare (lat/long) in string
             List<Double> LatLong = new List(2* path.length);
-            for (int i =0; i <= LatLong.length(); i +2){
-                LatLong[i] = graph.getNodes().getLatitude().[path[i]];  //??????????????
-                LatLong[i+1] = graph.getNodes().getLatitude().[path[i+1]];
-            }
-            System.out.println("done" + LatLong.toString() + " done");
+            for (int i =0; i <= LatLong.length(); i +=2){
+                LatLong[i] = graph.getNodes()[0][path[i]];  // lat is 0
+                LatLong[i+1] = graph.getNodes()[1][path[i+1]]; // long is 1
+            };
+            
+            //FALLS LatLong nicht mit Json funktioniert hier der Stringbuilder:
             //object of stringbuilder class
-            Stringbuilder builder = new Stringbuilder();
+           /* Stringbuilder builder = new Stringbuilder();
             
             for(Double d: str){
                 builder.append(d);
-                builder.append(" ");
+                builder.append(" "); // adds space to split it later
             }
             
             String string = builder.toString();
+            */
             
-            //test
-            System.out.println(string);
+            // LatLong muss dann mit string geaendert werden.
+            String json = new Gson().toJson(LatLong);
 
-            //string in response data
-            
-            //response success
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
+
         } catch (IOException e) {
 
         }
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+  
     }
 }
