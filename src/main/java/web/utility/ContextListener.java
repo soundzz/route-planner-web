@@ -38,7 +38,12 @@ public class ContextListener extends HttpServlet implements ServletContextListen
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-              try {
+             
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+   try {
             String input = request.getReader().readLine();
             System.out.println(input);
             String[] coordinates = input.split("[(, )]");
@@ -75,10 +80,5 @@ public class ContextListener extends HttpServlet implements ServletContextListen
         } catch (IOException e) {
 
         }
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-  
     }
 }
