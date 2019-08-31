@@ -7,4 +7,9 @@
     <groupId>de.uni-stuttgart</groupId>
     <artifactId>11</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>12</maven.compiler.source>
+        <maven.compiler.target>12</maven.compiler.target>
+    </properties>
 </project>
