@@ -14,6 +14,9 @@ public class Hub{
         graph = new Graph(path);
         KDTree = new Tree(graph.getNodes());
     }
+    public Graph getGraph(){
+        return graph;
+    }
     public static String test(){
         return "hello world";
     }
@@ -84,7 +87,6 @@ public class Hub{
      * @param args
      */
     public static void main(String args[]) {
-        Hub hub = new Hub("bw.fmi");
 
     }
 }

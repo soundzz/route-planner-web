@@ -8,6 +8,9 @@
             web.utility.ContextListener
         </listener-class>
     </listener>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
     <servlet>
         <servlet-name>MapServlet</servlet-name>
         <servlet-class>web.utility.ContextListener</servlet-class>

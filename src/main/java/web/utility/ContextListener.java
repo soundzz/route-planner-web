@@ -1,9 +1,5 @@
 package web.utility;
-
-import com.google.gson.Gson;
-import roupla.utility.Graph;
 import roupla.utility.Hub;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -20,7 +16,6 @@ import java.util.List;
 public class ContextListener extends HttpServlet implements ServletContextListener {
     private ServletContext context = null;
     private Hub hub = new Hub("bw.fmi");
-    private Graph graph = new Graph("bw.fmi");
     public void init(ServletConfig config) throws javax.servlet.ServletException {
         //initializing
         super.init(config);
@@ -59,8 +54,8 @@ public class ContextListener extends HttpServlet implements ServletContextListen
             //Knotenindizes -> koordinatenpaare (lat/long) in string
             List<Double> LatLong = new ArrayList<Double>();
             for (int i =0; i < path.size(); i ++){
-                LatLong.add(graph.getNodes()[0][path.get(i)]);  // lat is 0
-                LatLong.add(graph.getNodes()[1][path.get(i)]); // long is 1
+                LatLong.add(hub.getGraph().getNodes()[0][path.get(i)]);  // lat is 0
+                LatLong.add(hub.getGraph().getNodes()[1][path.get(i)]); // long is 1
             };
 
             //FALLS LatLong nicht mit Json funktioniert hier der Stringbuilder:
