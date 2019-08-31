@@ -19,8 +19,8 @@ import java.util.List;
 @WebListener
 public class ContextListener extends HttpServlet implements ServletContextListener {
     private ServletContext context = null;
-    private Hub hub = new Hub("MV.fmi");
-    private Graph graph = new Graph("MV.fmi");
+    private Hub hub = new Hub("bw.fmi");
+    private Graph graph = new Graph("bw.fmi");
     public void init(ServletConfig config) throws javax.servlet.ServletException {
         //initializing
         super.init(config);

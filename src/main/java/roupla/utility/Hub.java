@@ -69,10 +69,10 @@ public class Hub{
 
     }
     public List<Integer> userQuery(double startLat, double startLong, double endLat, double endLong){
-        System.out.println("nearest neighbor");
+        //System.out.println("nearest neighbor");
         int startNode = graph.nearestNeighbor(startLat, startLong);
         int endNode = graph.nearestNeighbor(endLat, endLong);
-        System.out.println("dijkstra");
+        //System.out.println("dijkstra");
         List<Integer> path = graph.startToTargetPath(startNode, endNode);
         return path;
     }
