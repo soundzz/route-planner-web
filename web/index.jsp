@@ -33,7 +33,7 @@
     var isProcessing = true;
     $.get("MapServlet", function () {
         document.getElementById("importing").innerHTML = "Import successful!"
-        isProcessing = false;   
+        isProcessing = false;
     })
 
 
