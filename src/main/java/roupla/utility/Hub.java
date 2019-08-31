@@ -84,7 +84,7 @@ public class Hub{
      * @param args
      */
     public static void main(String args[]) {
-        Hub hub = new Hub("MV.fmi");
+        Hub hub = new Hub("bw.fmi");
 
     }
 }
