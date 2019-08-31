@@ -30,9 +30,14 @@
 </body>
 
 <script>
+    var isProcessing = true;
+    $.get("MapServlet", function () {
+        document.getElementById("importing").innerHTML = "Import successful!"
+        isProcessing = false;   
+    })
 
-    document.getElementById("importing").innerHTML = "Startup successful!";
-    var isProcessing = false;
+
+    var coords = [];
     var nextLoc = 0;
     var startLoc = {Double: latitude, Double: longitude};
     var endLoc = {Double: latitude, Double: longitude};
@@ -65,12 +70,12 @@
             endMarker.setLatLng(e.latlng);
             endMarker.setOpacity(1);
             document.getElementById("importing").innerHTML = "Calculating route, please wait"
-                //TODO: route request
+            //TODO: route request
             $.post("MapServlet", String(startLoc) + String(endLoc), function (responseString) {
                 // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON
                 rawData = responseString.split(" ");
                 // polyline
-                var coords = [];
+                coords = [];
                 //console.log(rawData);
                 coords.push(startLoc);
 
