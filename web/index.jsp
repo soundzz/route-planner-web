@@ -30,7 +30,7 @@
 <script>
 
   document.getElementById("importing").innerHTML = "Import successful!";
-  var coords;
+
   var nextLoc = 0;
   var startLoc = {Double: latitude, Double: longitude};
   var endLoc = {Double: latitude, Double: longitude};
@@ -38,7 +38,7 @@
   var osmURL='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   var osmAttrib='Map data &copy <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
   var osm = new L.tileLayer(osmURL, {minZoom:7, maxZoom: 19, attribution: osmAttrib});
-  mymap.setView(new L.LatLng(48.805, 9.188), 9);
+  mymap.setView(new L.LatLng(53.60, 13.39), 9);
   osm.addTo(mymap)
   var startMarker = L.marker([0,0], {opacity: 0}).addTo(mymap);
   var endMarker = L.marker([0,0], {opacity: 0}).addTo(mymap);
@@ -62,10 +62,16 @@
       endMarker.setLatLng(e.latlng);
       endMarker.setOpacity(1);
       //TODO: route request
-    $.post("MapServlet",String(startLoc)+ String(endLoc), function(responseJson) {                 
+    $.post("MapServlet",String(startLoc)+ String(endLoc), function(responseString) {
         // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON
-         coords = responseJson.split(" ");
+         rawData = responseString.split(" ");
          // polyline
+        var coords = [];
+        //console.log(rawData);
+        for(i = 0; i < (rawData.length / 2) - 1; i++){
+          coords.push([rawData[2*i], rawData[2*i+1]]);
+        }
+        //console.log(coords);
          var polyline = L.polyline(coords, {color: 'blue'}).addTo(mymap);
     });
     
