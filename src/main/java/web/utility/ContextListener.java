@@ -15,7 +15,12 @@ import java.util.List;
 @WebListener
 public class ContextListener extends HttpServlet implements ServletContextListener {
     private ServletContext context = null;
+<<<<<<< Updated upstream
     private Hub hub = new Hub("bw.fmi");
+=======
+    private Hub hub = new Hub("germany.fmi");
+    private Graph graph = new Graph("germany.fmi");
+>>>>>>> Stashed changes
     public void init(ServletConfig config) throws javax.servlet.ServletException {
         //initializing
         super.init(config);
