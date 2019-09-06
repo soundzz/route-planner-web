@@ -1,6 +1,8 @@
 package roupla.utility;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.Comparator;
 
@@ -42,8 +44,10 @@ public class Graph {
      */
     public void readGraphData(String path) {
         BufferedReader reader = null;
+        InputStream stream = this.getClass().getClassLoader().getResourceAsStream(path);
         try {
-            reader = new BufferedReader(new FileReader(path));
+            reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+            //reader = new BufferedReader(new FileReader(path));
 
 
             boolean dataStart = false;

@@ -14,6 +14,9 @@ public class Hub{
         graph = new Graph(path);
         KDTree = new Tree(graph.getNodes());
     }
+    public Graph getGraph(){
+        return graph;
+    }
     public static String test(){
         return "hello world";
     }
@@ -69,10 +72,10 @@ public class Hub{
 
     }
     public List<Integer> userQuery(double startLat, double startLong, double endLat, double endLong){
-        System.out.println("nearest neighbor");
+        //System.out.println("nearest neighbor");
         int startNode = graph.nearestNeighbor(startLat, startLong);
         int endNode = graph.nearestNeighbor(endLat, endLong);
-        System.out.println("dijkstra");
+        //System.out.println("dijkstra");
         List<Integer> path = graph.startToTargetPath(startNode, endNode);
         return path;
     }
@@ -84,8 +87,6 @@ public class Hub{
      * @param args
      */
     public static void main(String args[]) {
-        Hub hub = new Hub("MV.fmi");
 
     }
 }
-
